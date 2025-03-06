@@ -1,19 +1,15 @@
 import mongoose from "mongoose";
 
 const Schema = new mongoose.Schema({
-    email: {
+    pergunta: {
         type: String,
         required: true,
     },
-    senha: {
+    resposta: {
         type: String,
         required: true,
-    },
-    nomeUsuario: {
-        type: String, 
-        required: true,        
     },
 
 })
 
-export default mongoose.model('Usuario', Schema); 
+export default mongoose.model('QaA', Schema); 

@@ -6,8 +6,8 @@ interface RespostaProps{
 const Resposta = ({user, text}: RespostaProps) => {
   return (
     <div>
-      <div className="ml-3 mr-3 mb-2 border-2 border-x-cyan-900 rounded">
-        <p className="size-5 ml-3">{user}</p>
+      <div className="ml-4 mr-4 mb-2 border-2 border-cyan-800 rounded">
+        <p className="mt-2 p-2">{user}</p>
         <p className="m-3">{text}</p>
       </div>
       <div></div>

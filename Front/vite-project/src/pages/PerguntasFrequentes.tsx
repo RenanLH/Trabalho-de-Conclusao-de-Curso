@@ -4,14 +4,9 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 
 type QaADB = {
-  questionPT: string,
-  awnserPT: string,
-
-  questionES: string,
-  awnserES: string,
-
-  questionEN: string,
-  awnserEN: string,
+  _id: string,
+  pergunta: string,
+  resposta: string,
 };
 
 type QaA = {
@@ -31,21 +26,22 @@ const PerguntasFrequentes = () => {
 
 
   async function getQuestions(){
-    const url = "http://localhost:7000/duvidas";
+    const url = "http://localhost:9875/duvidas";
 
     setDuvidas([]);
 
     const result = await axios.get(url);
 
-    if (result.status == 200 ){
+    if (result.status == 200 || result.status == 304 ){
+      console.log("OKKK");
       const resultArray = result.data as QaADB[];
       console.log(resultArray.length);
       
       resultArray.map((it, _index) => {
         //const element =  <Duvida question={it.questionPT} answer={it.awnserPT}/>
-        setDuvidasDB((prev) => [it, ...prev]);
+       setDuvidasDB((prev) => [it, ...prev]);
 
-        const duvida = {question: it.questionPT, awnser: it.awnserPT};
+        const duvida = {question: it.pergunta, awnser: it.resposta};
 
         setDuvidas((prev) => [duvida, ...prev]);
       });
@@ -60,7 +56,7 @@ const PerguntasFrequentes = () => {
       duvidasDB.map((it, _index) => {
         //const element =  <Duvida question={it.questionPT} answer={it.awnserPT}/>
 
-        let duvida = {question: it.questionPT, awnser: it.awnserPT};
+        let duvida = {question: it.pergunta, awnser: it.resposta};
 
         setDuvidas((prev) => [duvida, ...prev]);
       });
@@ -68,9 +64,9 @@ const PerguntasFrequentes = () => {
     else if(language == "es") {
       duvidasDB.map((it, _index) => {
         //const element =  <Duvida question={it.questionPT} answer={it.awnserPT}/>
-        let duvida = {question: it.questionES, awnser: it.awnserES};
+        let duvida = {question: it.pergunta, awnser: it.resposta};
         if (duvida.question == "" && duvida.awnser == ""){
-          duvida = {question: it.questionPT, awnser: it.awnserPT }
+          duvida = {question: it.pergunta, awnser: it.resposta }
         }   
         setDuvidas((prev) => [duvida, ...prev]);
       });
@@ -79,11 +75,11 @@ const PerguntasFrequentes = () => {
     else if(language == "en") {
       duvidasDB.map((it, _index) => {
         //const element =  <Duvida question={it.questionPT} answer={it.awnserPT}/>
-        let duvida = {question: it.questionEN, awnser: it.awnserEN};
+        let duvida = {question: it.pergunta, awnser: it.resposta};
 
-        if (it.questionEN == "" && it.awnserEN == ""){
+        if (it.pergunta == "" && it.resposta == ""){
 
-          duvida = {question: it.questionPT, awnser: it.awnserPT }
+          duvida = {question: it.pergunta, awnser: it.resposta }
         }   
         setDuvidas((prev) => [duvida, ...prev]);
       });
@@ -94,6 +90,9 @@ const PerguntasFrequentes = () => {
     <div>
       <div className="grid grid-flow-col grid-cols-2 ">
         <div className="col-start-3 p-2 me-4">{<SelectLanguage changeLanguage={onChangeLanguage} />}</div>
+      </div>
+      <div className=" flex-auto text-center">
+        <h1>Perguntas Frequentes</h1>
       </div>
       <div className="flex flex-row sm:justify-start lg:justify-center mt-12">
         <div className=" rounded-lg container mx-auto">

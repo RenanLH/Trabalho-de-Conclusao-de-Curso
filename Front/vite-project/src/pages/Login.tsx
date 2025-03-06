@@ -1,59 +1,29 @@
-import "../styles/Login.css";
-
 const Login = () => {
   return (
     <div id="Login">
-      <div
-        className="container mt-4"
-        style={{ width: "40%", alignContent: "center" }}
-      >
-        <h1
-          style={{
-            textAlign: "center",
-            fontWeight: "bolder",
-            marginBottom: "50px",
-          }}
-        >
-          Login
-        </h1>
-
-        <form action="">
-          <input
-            style={{
-              background: "lightgray",
-              color: "GrayText",
-              marginBottom: "20px",
-              padding: "15px",
-            }}
-            className="form-control"
+      <div className="container mt-4 w-2/4" 
+        style={{ width: "40%" }}>
+        <h1 className="text-center mb-12">Login</h1>
+        <form action="" onSubmit={(e) => e.preventDefault()}>
+          
+          <input className="mb-3 p-3 w-full rounded bg-gray-300"
             type="text"
             placeholder="Email"
           />
-          <input
-            style={{
-              background: "lightgray",
-              color: "GrayText",
-              marginBottom: "20px",
-              padding: "15px",
-            }}
-            className="form-control"
+          
+          <input className="mb-5 p-3 w-full rounded bg-gray-300"
             type="text"
             placeholder="Senha"
           />
+          
           <input
-            style={{
-              backgroundColor: "black",
-              color: "white",
-              fontWeight: "bold",
-              marginBottom: "50px",
-              padding: "15px",
-            }}
-            className="form-control"
+            className="mb-4 p-3 w-full rounded text-white bg-black"
             type="submit"
             value="Entrar"
           />
         </form>
       </div>
+
       <div
         style={{
           display: "flex",

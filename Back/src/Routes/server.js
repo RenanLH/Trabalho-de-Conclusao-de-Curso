@@ -1,15 +1,31 @@
-import express from "express";
-import cors from "cors";
+import { Router } from "express";
+import UsuarioController from "../Controllers/UsuarioController.js";
+import QaAControler from "../Controllers/QaAControler.js";
+import TopicoController from "../Controllers/TopicoController.js";
+import MensagemController from "../Controllers/MensagemController.js";
+import RespostaController from "../Controllers/RespostaController.js";
 
-const api = express();
+const routes = Router();
 
-api.use(express.json());
-api.use(cors());
+routes.post('/usuario', UsuarioController.createUsuario);
+routes.get('/usuario/:email', UsuarioController.getUsuario);
 
-const PORT = process.env.PORT || 7000;
-api.listen(PORT, () => console.log(`Server running on port ${PORT}`));  
+routes.post('/duvidas', QaAControler.createPergunta);
+routes.get('/duvidas', QaAControler.index);
 
-api.get("/topicos/:tid", async(req, res) => {
+routes.get('/topicos/:idTopico', TopicoController.getTopico);
+routes.get('/topicos/:idTopico', TopicoController.getTopico);
+
+routes.post('/mensagens', MensagemController.createMensagem);
+routes.get('/mensagens/usuario/:idUsuario', MensagemController.getMensagemUsuario);
+routes.get('/mensagens/id/:idMensagem', MensagemController.getMensagemId);
+routes.get('/mensagens/index/:statusMensagem', MensagemController.getIndex);
+
+routes.post('/respostas/idMesagem/:idMensagem', RespostaController.createResposta);
+routes.post('/respostas/idResposta/:idResposta', RespostaController.createResposta);
+routes.get('/respostas/idMesagem/:idMensagem', RespostaController.getRespostas);
+
+/*routes.get("/topicos/:tid", async(req, res) => {
     try {
         const id = req.params.tid;
         let data;
@@ -29,9 +45,9 @@ api.get("/topicos/:tid", async(req, res) => {
         res.status(500).json(`error ${error}`);
     }
 
-});
+});*/
 
-api.get("/topicos", async(req, res) => {
+routes.get("/topicos", async(req, res) => {
     try {
         const topicos = [{
             'idTopico': 1,
@@ -58,11 +74,10 @@ api.get("/topicos", async(req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).json(`error ${error}`);
-
     }
 });
-
-api.get("/duvidas", async(req, res )=> {
+/*
+routes.get("/duvidas", async(req, res )=> {
     try {
         const duvidas = [{
             'questionPT': 'Como obter uma autorização de Residência para fins laborais?',
@@ -94,4 +109,6 @@ api.get("/duvidas", async(req, res )=> {
         console.log(error);
         res.status(500).json(`error:  ${error}`);
     }
-});
+});*/
+
+export default routes;

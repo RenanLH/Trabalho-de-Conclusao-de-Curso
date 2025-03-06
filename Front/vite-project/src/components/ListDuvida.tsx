@@ -15,6 +15,11 @@ type Question = {
   awnserEN: string,
 };
 
+type QuestionDB = {
+  pergunta: string,
+  resposta: string,
+};
+
 const ListDuvida = () => {
   const { t } = useTranslation();
 
@@ -26,17 +31,17 @@ const ListDuvida = () => {
 
 
   async function getQuestions(){
-    const url = "http://localhost:7000/duvidas";
+    const url = "http://localhost:9875/pergunta";
 
     setDuvidas([]);
 
     const result = await axios.get(url);
 
     if (result.status == 200){
-      const resultArray = result.data as Question[];
+      const resultArray = result.data as QuestionDB[];
       
       resultArray.map((it) => {
-        const element =  <Duvida question={it.questionPT} answer={it.questionPT}/>
+        const element =  <Duvida question={it.pergunta} answer={it.resposta}/>
         setDuvidas((prev) => [element, ...prev]);
       });
 

@@ -21,7 +21,7 @@ const ListCard = () => {
   
 
   async function getTopics() {
-    const url = "http://localhost:7000/topicos"
+    const url = "http://localhost:9875/topicos"
     setTopics([]);
 
     const result = await axios.get(url);
@@ -70,7 +70,7 @@ const ListCard = () => {
       <ul className="grid grid-flow-row sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4">
         {topics.map((item, _index) => (
           <li className="list-item p-4">
-            <Card id={item.idTopico} title={item.title} user={item.user}/>
+            <Card id={item.idTopico} title={item.title} user={""}/>
           </li>
         ))}
       </ul>
