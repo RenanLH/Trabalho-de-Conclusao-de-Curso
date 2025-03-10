@@ -1,4 +1,6 @@
+import { useTranslation } from "react-i18next";
 import Duvida from "../components/Duvida";
+import Header from "../components/Header";
 import SelectLanguage from "../components/SelectLanguage";
 import axios from "axios";
 import { useState, useEffect } from "react";
@@ -16,7 +18,7 @@ type QaA = {
 
 
 const PerguntasFrequentes = () => {
-
+  const { t, i18n } = useTranslation();
   const [duvidas, setDuvidas] = useState<QaA[]>([])
   const [duvidasDB, setDuvidasDB] = useState<QaADB[]>([])
 
@@ -88,21 +90,21 @@ const PerguntasFrequentes = () => {
 
   return (
     <div>
-      <div className="grid grid-flow-col grid-cols-2 ">
-        <div className="col-start-3 p-2 me-4">{<SelectLanguage changeLanguage={onChangeLanguage} />}</div>
-      </div>
+        <Header texto={t("Perguntas_Frequentes")} changeLanguage={(e:string) => {i18n.changeLanguage(e);}}/>
+
       <div className=" flex-auto text-center">
-        <h1>Perguntas Frequentes</h1>
       </div>
       <div className="flex flex-row sm:justify-start lg:justify-center mt-12">
         <div className=" rounded-lg container mx-auto">
 
-          {duvidas.map((item, _index)=> 
-            <Duvida question={item.question} answer={item.awnser}/>
+          {duvidas.map((item, index)=> 
+            <Duvida question={item.question} answer={item.awnser} key={index}/>
           )}
 
         </div>
       </div>
+      <footer className="bg-blue-700 text-white p-4 position-absolute bottom-0 w-full">
+      </footer>
     </div>
   );
 };

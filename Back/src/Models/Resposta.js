@@ -11,12 +11,12 @@ const Schema = new mongoose.Schema({
         ref: 'Resposta',
         required: false,
     },
-    IdMensagem:{
+    idMensagem: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Mensagem',
         required: false,
     },
-    nomeUsuario:{
+    nomeUsuario: {
         type: String,
         required: false,
     },

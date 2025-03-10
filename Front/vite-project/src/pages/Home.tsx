@@ -1,21 +1,38 @@
-import SelectLanguage from "../components/SelectLanguage";
-
-
+import { useTranslation } from "react-i18next";
+import Header from "../components/Header";
 
 const Home = () => {
+  const { t, i18n } = useTranslation();
   return (
-    <div>
-      <div className="grid grid-flow-row  grid-rows-6">
-      <div className="grid grid-flow-col grid-cols-2 ">
-        <div className="col-start-3 p-2 me-4">{<SelectLanguage changeLanguage={() => {}} />}</div>
-      </div>
-        <div className="row-start-2">
-          <h1 className="text-center">Plataforma de apoio a migrantes</h1>
-        </div>
-        <div className="row-start-5">
-        </div>
-      </div>
-    </div>
+    <div className="bg-gray-100 min-h-screen flex flex-col">
+    
+    <Header texto={t("Plataforma para auxilio de Migrantes e Refugiados")} changeLanguage={(e:string) => {
+    i18n.changeLanguage(e)}}/>
+    
+
+    <main className="flex-grow p-6">
+
+    <section className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h2 className="text-2xl font-semibold mb-4">Projeto de Trabalho de conclusão de curso</h2>
+        <p>
+         {t("Sobre_Tcc")}
+        </p>
+      </section>
+      <section className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h2 className="text-2xl font-semibold mb-4">Clínica de Direitos Fundamentais e Migração</h2>
+        <p>
+          {t("Sobre_Clinica")}
+
+        </p>
+      </section>
+
+      
+
+    </main>
+
+    <footer className="bg-blue-700 text-white p-4 text-center">
+    </footer>
+  </div>
   );
 };
 

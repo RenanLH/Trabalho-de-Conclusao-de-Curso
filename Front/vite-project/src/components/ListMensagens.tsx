@@ -48,11 +48,13 @@ const ListMensagens = () => {
     <div>
       <ul className="grid grid-flow-row sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4">
         {mensagens.map((item, _index) => (
-          <li className="list-item p-4">
+          <li className="list-item p-4" key={item._id}>
             <MensageCard id={item._id} content={item.conteudoMensagem} user={item.nomeUsuario} data={formatDate(item.dataEnvio)}/>
           </li>
         ))}
       </ul>
+
+      
     </div>
   );
 };

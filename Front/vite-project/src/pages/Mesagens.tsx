@@ -1,19 +1,20 @@
+import { useTranslation } from "react-i18next";
+import Header from "../components/Header";
 import ListMensagens from "../components/ListMensagens";
-import SelectLanguage from "../components/SelectLanguage";
 
 const Mensagens = () => {
+  const { t, i18n } = useTranslation();
+  
   return (
     <div>
-      <div className="grid grid-flow-col grid-cols-2 ">
-        <div className="col-start-3 p-2 me-4">
-          <SelectLanguage changeLanguage={() => {}} />
-        </div>
-      </div>
-      <h1 className="text-center">Mensagens</h1>
+      <Header texto={t("Minhas Mensagens")} changeLanguage={(e:string) => {i18n.changeLanguage(e);}}/>
 
       <div className="flex flex-row">
         <ListMensagens />
       </div>
+
+      <footer className="bg-blue-700 text-white p-4 position-absolute bottom-0 w-full">
+      </footer>
     </div>
   );
 };

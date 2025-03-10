@@ -1,35 +1,88 @@
 import { useState } from "react";
-import { Button, Form, InputGroup } from "react-bootstrap";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import Header from "../components/Header";
+import { useTranslation } from "react-i18next";
 
 library.add(fab, faEyeSlash, faEye);
 
 const Cadastro = () => {
+  const { t, i18n } = useTranslation();
   const [showPass, setShowPass] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | ArrayBuffer | null>(null);
+  const [nomeUsuario, setNomeUsuario] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [senha, setSenha] = useState<string>("");
 
   function clickHandler() {
     setShowPass(!showPass);
   }
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const url = "http://localhost:9875/usuarios";
+    const result = await axios.post(url, {
+      nomeUsuario,
+      email,
+      senha,
+    });
+
+    if (result.status == 200) {
+      console.log("Cadastro efetuado com sucesso");
+      //redirect to another page
+    } else {
+      console.log("Erro ao efetuar cadastro");
     }
-  };
+  }
+
 
   return (
     <div>
-      <div className="grid grid-flow-col grid-cols-5">
-        <div className="mt-20 max-w-96 col-start-3 col-end-5 items-center text-center ">
+      <Header texto={t("Registar")} changeLanguage={(e:string) => {i18n.changeLanguage(e);}}/>
+        
+        <div className="container mt-4 text-center"  style={{ width: "40%" }}>
+
+
+          <form action="" onSubmit={(e) => onSubmit(e)}>
+           
+            <input className="mb-3 p-3 w-full rounded bg-gray-300"
+              type="text"
+              placeholder="Nome Completo"
+              onChange={(e) => setNomeUsuario(e.target.value)}
+              value={nomeUsuario}
+            />
+            
+            <input className="mb-3 p-3 w-full rounded bg-gray-300"
+              type="text"
+              placeholder="Email"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+            />
+
+            <div className="flex gap-3  items-center ">
+              <input className=" p-3 w-full h-1/2 rounded bg-gray-300"
+                type={showPass ? "password" : "text"}
+                placeholder="Senha"
+                onChange={(e) => setSenha(e.target.value)}
+                value={senha}/>
+              <FontAwesomeIcon
+                        icon={showPass ? faEye : faEyeSlash}
+                        onClick={clickHandler}/>
+            </div>
+            
+            <input
+              className="mb-4 mt-2 p-3 rounded text-white bg-black"
+              type="submit"
+              value="Criar Conta"
+            />
+          </form>
+          </div>
+
+
+          {/*
+          
           <Form>
             <Form.Group className="mb-4 " controlId="formName">
               <Form.Control type="text" placeholder="Nome" />
@@ -79,9 +132,12 @@ const Cadastro = () => {
               Entrar
             </Button>
           </Form>
-        </div>
+          
+          
+          */}
+          <footer className="bg-blue-700 text-white p-4 position-absolute bottom-0 w-full">
+          </footer>
       </div>
-    </div>
   );
 };
 

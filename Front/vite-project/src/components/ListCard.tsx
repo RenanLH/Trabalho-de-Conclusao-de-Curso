@@ -69,7 +69,7 @@ const ListCard = () => {
     <div>
       <ul className="grid grid-flow-row sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4">
         {topics.map((item, _index) => (
-          <li className="list-item p-4">
+          <li className="list-item p-4" key={item.idTopico}>
             <Card id={item.idTopico} title={item.title} user={""}/>
           </li>
         ))}

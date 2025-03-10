@@ -1,29 +1,13 @@
 {
-  "Duvida1": "How do I obtain a residence visa in Brazil?",
-  "Resposta1": "To obtain a residence visa in Brazil, you should contact the Brazilian consulate or embassy in your home country before traveling. After arriving in Brazil, you must register with the Federal Police within 30 days.",
-  "Duvida2": "Do I need a visa to work in Brazil?",
-  "Resposta2": "Yes, to work legally in Brazil, you will need a work visa. Your employer must apply for a work permit from the Ministry of Labor and Employment (MTE), and you must apply for the visa at the Brazilian consulate.",
-  "Duvida3": "What documents are needed to live in Brazil?",
-  "Resposta3": "The basic documents include a valid passport, appropriate visa, Birth Certificate, Criminal Record Certificate, and registration with the Federal Police (RNE - National Registry of Foreigners). Some documents need to be translated and authenticated.",
-  "Duvida4": "How do I open a bank account in Brazil?",
-  "Resposta4": "To open a bank account in Brazil, you will need documents such as a passport, proof of residence, CPF (Individual Taxpayer Registry), and RNE. You can go to any bank with these documents to open the account.",
-  "Duvida5": "How do I obtain a CPF (Individual Taxpayer Registry)?",
-  "Resposta5": "The CPF can be requested at a Correios post office, Banco do Brasil, or Caixa Econômica Federal, or directly at the Federal Revenue Service. You will need an identity document and to fill out a form.",
-  "Duvida6": "Can I bring my family with me? How does the visa for family members work?",
-  "Resposta6": "Yes, you can bring your family. Family members (spouse and children) can apply for a family reunion visa, which must be requested at the Brazilian consulate with documentation proving the family relationship.",
+  "Inicio": "Home",
+  "Perguntas_Frequentes": "Frequently Asked Questions",
+  "Forum": "Forum",
+  "Minhas Mensagens": "Messages",
 
-  "ForumUsuario": "@Anonymous",
+  "Login": "Login",
+  "Registar": "Register",
+  "Plataforma para auxilio de Migrantes e Refugiados": "Platform for Assistance to Migrants and Refugees",
 
-  "ForumTitulo1": "The Path of Adaptation: Challenges of International Migration",
-  "ForumTexto1": "As a migrant in a new country, I face a series of challenges that impact my adaptation and well-being.",
-  "ForumTitulo2": "Working Beyond Borders: Challenges in Professional Adaptation",
-  "ForumTexto2": "Finding employment compatible with my skills and experience is a difficult task due to language and cultural barriers.",
-  "ForumTitulo3": "Immigration in Perspective: Dealing with the Complexity of Visas and Legal Status",
-  "ForumTexto3": "Additionally, dealing with visa and immigration issues can be complex and bureaucratic, causing anxiety and uncertainty about my legal status.",
-  "ForumTitulo4": "Health Beyond Borders: Challenges in Adapting to the Local Medical System",
-  "ForumTexto4": "Unfamiliarity with the local healthcare system and the costs associated with medical care also pose a significant concern.",
-  "ForumTitulo5": "Support Network Beyond Borders: Challenges in Cultural and Social Integration",
-  "ForumTexto5": "Social integration and building a support network in a culturally different environment require additional time and effort.",
-  "ForumTitulo6": "Longing and Adaptability: Emotional Challenges of Life in Foreign Land",
-  "ForumTexto6": "Additionally, homesickness and cultural shock are constant emotional challenges that I face."
+  "Sobre_Tcc": "This project aims to assist, expand, and improve the quality of services provided by the Clinic of Fundamental Social Rights, through the development of an accessible platform for information on the social rights of migrants and refugees, as well as the provision of legal advisory services and guidance on how to address their needs in the country in a simple and quick manner",
+  "Sobre_Clinica":"An extension project of the State University of Western Paraná, Foz do Iguaçu campus, which aims to primarily understand and disseminate public policies for the protection and promotion of the fundamental and social rights of migrants through the methodology of legal clinics"
 }

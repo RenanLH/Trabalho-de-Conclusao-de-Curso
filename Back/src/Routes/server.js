@@ -4,11 +4,16 @@ import QaAControler from "../Controllers/QaAControler.js";
 import TopicoController from "../Controllers/TopicoController.js";
 import MensagemController from "../Controllers/MensagemController.js";
 import RespostaController from "../Controllers/RespostaController.js";
+import SessaoController from "../Controllers/SessaoController.js";
 
 const routes = Router();
 
-routes.post('/usuario', UsuarioController.createUsuario);
-routes.get('/usuario/:email', UsuarioController.getUsuario);
+routes.post('/usuarios', UsuarioController.createUsuario);
+routes.get('/usuarios/index', UsuarioController.getIndexUsuario);
+routes.get('/usuarios/', UsuarioController.getUsuario);
+
+routes.post('/sessao/', SessaoController.createSessao);
+routes.get('/sessao/', SessaoController.getSessao);
 
 routes.post('/duvidas', QaAControler.createPergunta);
 routes.get('/duvidas', QaAControler.index);
@@ -21,9 +26,9 @@ routes.get('/mensagens/usuario/:idUsuario', MensagemController.getMensagemUsuari
 routes.get('/mensagens/id/:idMensagem', MensagemController.getMensagemId);
 routes.get('/mensagens/index/:statusMensagem', MensagemController.getIndex);
 
-routes.post('/respostas/idMesagem/:idMensagem', RespostaController.createResposta);
+routes.post('/respostas/mensagem/', RespostaController.createResposta);
 routes.post('/respostas/idResposta/:idResposta', RespostaController.createResposta);
-routes.get('/respostas/idMesagem/:idMensagem', RespostaController.getRespostas);
+routes.get('/respostas/mensagem/:idMensagem', RespostaController.getRespostas);
 
 /*routes.get("/topicos/:tid", async(req, res) => {
     try {

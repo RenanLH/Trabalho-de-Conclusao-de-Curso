@@ -1,20 +1,24 @@
+import { useTranslation } from "react-i18next";
+import Header from "../components/Header";
 import ListCard from "../components/ListCard";
-import SelectLanguage from "../components/SelectLanguage";
 
 const Forum = () => {
+  const { t, i18n } = useTranslation();
+  
   return (
     <div>
-      <div className="grid grid-flow-col grid-cols-2 ">
+      <div>
        
-        <div className="col-start-3 p-2 me-4">
-          <SelectLanguage changeLanguage={() => {}} />
-        </div>
+      <Header texto={t("Forum")} changeLanguage={(e:string) => {
+        i18n.changeLanguage(e);
+        }}/>
       </div>
-      <h1 className="text-center">Forum</h1>
-
+      
       <div className="flex flex-row">
         <ListCard />
       </div>
+      <footer className="bg-blue-700 text-white p-4 position-absolute bottom-0 w-full">
+      </footer>
     </div>
   );
 };

@@ -18,7 +18,6 @@ async function createTopico(req, res) {
         console.log(error);
         return res.status(400).send("error");
     }
-  
  }
 
 async function getTopico(req, res) {
