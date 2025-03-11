@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import Responder from "../components/Responder";
 import SelectLanguage from "../components/SelectLanguage";
 import Resposta from "../components/Resposta";
+import { useTranslation } from "react-i18next";
+import Header from "../components/Header";
 
 type TopicParams = {
   id: string;
@@ -34,6 +36,7 @@ const Topic = () => {
   const [topico, setTopico] = useState<tTopico>({id:"",title:"",user:"",text:""});
   const [respostas, setRespostas] = useState<tResposta[]>([]);
   const [loaded, setLoaded] = useState<boolean>(false); 
+  const { t, i18n } = useTranslation();
 
   async function getTopic(){
     const url = "http://localhost:1099/topicos/" + id;
@@ -52,9 +55,7 @@ const Topic = () => {
 
   return (
     <div>
-      <div className="flex justify-end mr-7 p-1 mt-1">
-          <SelectLanguage changeLanguage={() => {}} />
-      </div>      
+      <Header texto={t("Tópico")} changeLanguage={(e:string) => {i18n.changeLanguage(e);}}/>
       {loaded ?
         <div>
           <Topico title={topico.title} user={topico.user} text={topico.text} />

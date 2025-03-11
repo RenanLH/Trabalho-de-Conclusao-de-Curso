@@ -62,7 +62,7 @@ const Navbar = () => {
             <Link to="/mensagens">
               <img className="h-10" src={logo_mail} alt="Mensagens" />
             </Link>
-            <p className="mt-2">{t("Mensagens")}</p>
+            <p className="mt-2">{t("Minhas Mensagens")}</p>
           </div>
         )}
 

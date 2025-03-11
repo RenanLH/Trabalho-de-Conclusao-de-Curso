@@ -1,6 +1,6 @@
 import { Router } from "express";
 import UsuarioController from "../Controllers/UsuarioController.js";
-import QaAControler from "../Controllers/QaAControler.js";
+import QaAController from "../Controllers/QaAController.js";
 import TopicoController from "../Controllers/TopicoController.js";
 import MensagemController from "../Controllers/MensagemController.js";
 import RespostaController from "../Controllers/RespostaController.js";
@@ -15,8 +15,8 @@ routes.get('/usuarios/', UsuarioController.getUsuario);
 routes.post('/sessao/', SessaoController.createSessao);
 routes.get('/sessao/', SessaoController.getSessao);
 
-routes.post('/duvidas', QaAControler.createPergunta);
-routes.get('/duvidas', QaAControler.index);
+routes.post('/duvidas', QaAController.createPergunta);
+routes.get('/duvidas', QaAController.index);
 
 routes.get('/topicos/:idTopico', TopicoController.getTopico);
 routes.get('/topicos/:idTopico', TopicoController.getTopico);

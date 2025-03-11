@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import Duvida from "../components/Duvida";
 import Header from "../components/Header";
-import SelectLanguage from "../components/SelectLanguage";
 import axios from "axios";
 import { useState, useEffect } from "react";
 

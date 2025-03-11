@@ -13,13 +13,13 @@ const Home = () => {
     <main className="flex-grow p-6">
 
     <section className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <h2 className="text-2xl font-semibold mb-4">Projeto de Trabalho de conclusão de curso</h2>
+        <h2 className="text-2xl font-semibold mb-4">{t("Projeto de Trabalho de conclusão de curso")}</h2>
         <p>
          {t("Sobre_Tcc")}
         </p>
       </section>
       <section className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <h2 className="text-2xl font-semibold mb-4">Clínica de Direitos Fundamentais e Migração</h2>
+        <h2 className="text-2xl font-semibold mb-4">{t("Clínica de Direitos Fundamentais e Migração")}</h2>
         <p>
           {t("Sobre_Clinica")}
 
