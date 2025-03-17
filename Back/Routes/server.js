@@ -8,27 +8,27 @@ import SessaoController from "../Controllers/SessaoController.js";
 
 const routes = Router();
 
-routes.post('/usuarios', UsuarioController.createUsuario);
-routes.get('/usuarios/index', UsuarioController.getIndexUsuario);
-routes.get('/usuarios/', UsuarioController.getUsuario);
+routes.post('/api/usuarios', UsuarioController.createUsuario);
+routes.get('/api/usuarios/index', UsuarioController.getIndexUsuario);
+routes.post('/api/usuarios/get', UsuarioController.getUsuario);
 
-routes.post('/sessao/', SessaoController.createSessao);
-routes.get('/sessao/', SessaoController.getSessao);
+routes.post('/api/sessao/', SessaoController.createSessao);
+routes.get('/api/sessao/', SessaoController.getSessao);
 
-routes.post('/duvidas', QaAController.createPergunta);
-routes.get('/duvidas', QaAController.index);
+routes.post('/api/duvidas', QaAController.createPergunta);
+routes.get('/api/duvidas', QaAController.index);
 
-routes.get('/topicos/:idTopico', TopicoController.getTopico);
-routes.get('/topicos/:idTopico', TopicoController.getTopico);
+routes.get('/api/topicos/:idTopico', TopicoController.getTopico);
+routes.get('/api/topicos/:idTopico', TopicoController.getTopico);
 
-routes.post('/mensagens', MensagemController.createMensagem);
-routes.get('/mensagens/usuario/:idUsuario', MensagemController.getMensagemUsuario);
-routes.get('/mensagens/id/:idMensagem', MensagemController.getMensagemId);
-routes.get('/mensagens/index/:statusMensagem', MensagemController.getIndex);
+routes.post('/api/mensagens', MensagemController.createMensagem);
+routes.get('/api/mensagens/usuario/:idUsuario', MensagemController.getMensagemUsuario);
+routes.get('/api/mensagens/id/:idMensagem', MensagemController.getMensagemId);
+routes.get('/api/mensagens/index/:statusMensagem', MensagemController.getIndex);
 
-routes.post('/respostas/mensagem/', RespostaController.createResposta);
-routes.post('/respostas/idResposta/:idResposta', RespostaController.createResposta);
-routes.get('/respostas/mensagem/:idMensagem', RespostaController.getRespostas);
+routes.post('/api/respostas/mensagem/', RespostaController.createResposta);
+routes.post('/api/respostas/idResposta/:idResposta', RespostaController.createResposta);
+routes.get('/api/respostas/mensagem/:idMensagem', RespostaController.getRespostas);
 
 /*routes.get("/topicos/:tid", async(req, res) => {
     try {
@@ -52,7 +52,7 @@ routes.get('/respostas/mensagem/:idMensagem', RespostaController.getRespostas);
 
 });*/
 
-routes.get("/topicos", async(req, res) => {
+routes.get("/api/topicos", async(req, res) => {
     try {
         const topicos = [{
             'idTopico': 1,

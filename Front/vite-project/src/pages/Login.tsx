@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
@@ -15,6 +15,14 @@ const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
 
+  useEffect(() => { 
+    let language = sessionStorage.getItem("language");
+    if (!language) 
+      language = "pt";
+    i18n.changeLanguage(language);
+  },[]);
+  
+
   function clickHandler() {
     setShowPass(!showPass);
   }
@@ -22,17 +30,21 @@ const Login = () => {
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const url = "http://localhost:9875/sessao";
+    const url = "http://localhost:9875/api/sessao";
 
     //axios send cookies
-    axios.defaults.withCredentials = true;
+    //axios.defaults.withCredentials = true;
     
     const result = await axios.post(url, {
       email,
       senha,
     });
 
-    if(result.status == 200){
+    if(result.status == 201){
+
+      sessionStorage.setItem("token", result.data.token);
+      sessionStorage.setItem("idUsuario", result.data.idUsuario);
+
       console.log("Login efetuado com sucesso");
       
       window.location.href = "/home";
@@ -42,17 +54,15 @@ const Login = () => {
       console.log("Erro ao efetuar login");
     }
 
-    axios.defaults.withCredentials = false;
+    //axios.defaults.withCredentials = false;
 
   }
 
   return (
-    
-    <div id="Login">
+    <div>
       <Header texto={t("Login")} changeLanguage={(e:string) => {i18n.changeLanguage(e)}}/>
    
       <div className="container mt-4 w-2/4" style={{ width: "40%" }}>
-
 
         <form action="" onSubmit={(e) => onSubmit(e)}>
           
@@ -104,8 +114,6 @@ const Login = () => {
           }}
         />
       </div>
-      <footer className="bg-blue-700 text-white p-4 position-absolute bottom-0 w-full">
-      </footer>
     </div>
   );
 };

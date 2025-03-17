@@ -32,9 +32,18 @@ const Mensagem = () => {
   let {id} = useParams<MensagemParams>();
   id = id as string;
 
-  useEffect(() => {
+
+  useEffect(() => { 
+    let language = sessionStorage.getItem("language");
+    if (!language) 
+      language = "pt";
+    i18n.changeLanguage(language);
+
+
     getMensagem();
+   
   },[]);
+ 
 
   const { t, i18n } = useTranslation();
   const [topico, setTopico] = useState<tTopico>({id:"",title:"",user:"",text:""});
@@ -45,7 +54,7 @@ const Mensagem = () => {
   const [respostas, setRespostas] = useState<tResposta[]>([]);
 
   async function getMensagem(){
-    let url = "http://localhost:9875/mensagens/id/" + id;
+    let url = "http://localhost:9875/api/mensagens/id/" + id;
     setRespostas([]);
 
     let result = await axios.get(url);
@@ -59,7 +68,7 @@ const Mensagem = () => {
       setIdMessage(mensagem._id);
       setTopico({id:mensagem._id, title:"", user: mensagem.nomeUsuario, text:mensagem.conteudoMensagem});
   
-      url = "http://localhost:9875/respostas/mensagem/" + id;
+      url = "http://localhost:9875/api/respostas/mensagem/" + id;
       result = await axios.get(url);
 
       if (result.status == 200){
@@ -67,33 +76,32 @@ const Mensagem = () => {
         respostas.map((item, _index: number) => {
           setRespostas((prev) => [...prev, item]);
           setIdResposta(item.idResposta);
+          setIdUsuario(item.idUsuario);
         });
       }
     }
   }
 
-  //todo compare idUsuario with loggedUser
   function validateResposta(){
-    return true;//(idUsuario == "");
+    const loggedUser = sessionStorage.getItem("idUsuario");
+    return (loggedUser != idUsuario)
   }
 
   return (
     <div>
-      
-      <Header texto={t("Mensagem")} changeLanguage={(e:string) => {i18n.changeLanguage(e)}}/>
 
-    {loaded ? 
-      <div className="flex flex-col">
-        <Topico title={""} user={topico.user} text={topico.text} />
-        {respostas.map((item, _index) => (
-          <Resposta user={item.nomeUsuario} text={item.conteudoResposta}/>
-        ))}
-        {validateResposta() && <Responder idMensagem={idMessage} idResposta={idResposta} idUsuario={idUsuario}/>}	
-      </div>  
-    : <div></div>
-    }
-    <footer className="bg-blue-700 text-white p-4 position-absolute bottom-0 w-full">
-    </footer>
+      <Header texto={t("Mensagem")} changeLanguage={(e:string) => {i18n.changeLanguage(e)}}/>
+      {loaded ? 
+        <div className="flex flex-col">
+          <Topico title={""} user={topico.user} text={topico.text} />
+          {respostas.map((item, _index) => (
+            <Resposta user={item.nomeUsuario} text={item.conteudoResposta}/>
+          ))}
+          {validateResposta() && <Responder idMensagem={idMessage} idResposta={idResposta} idUsuario={idUsuario}/>}	
+        </div>  
+      : <div></div>
+      }
+  
     </div>
   );
 };

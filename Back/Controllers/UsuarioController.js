@@ -1,5 +1,7 @@
 import Usuario from "../Models/Usuario.js";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
+import Sessao from "../Models/Sessao.js";
 
 async function hashPass(senha) {
     try {
@@ -13,7 +15,10 @@ async function hashPass(senha) {
 
 }
 
-
+const role = {
+    ADMIN:'admin',
+    USER:'user',
+}
 
 async function createUsuario(req, res) {
     try {
@@ -38,9 +43,31 @@ async function createUsuario(req, res) {
             email,
             senha: hashedPass,
             nomeUsuario,
+            role: role.USER
         })
 
-        return res.status(201).send(createdUsuario);
+        if (!createdUsuario){
+            return res.status(400).send("Erro ao criar o usuario");
+        }
+
+        const idUsuario = createdUsuario._id;
+        const token = crypto.randomBytes(16).toString('hex');
+
+        const dataCriacao = new Date(Date.now());
+    
+        const dataExpiracao = new Date(dataCriacao);
+        dataExpiracao.setDate(dataCriacao.getDate() + 7);
+
+        const createdSessao = await Sessao.create({
+            idUsuario,
+            token,
+            dataCriacao,
+            dataExpiracao
+        });
+
+        console.log(createdSessao);
+
+        return res.status(201).send(createdSessao);
 
     } catch (error) {
         console.log(error);
@@ -52,6 +79,8 @@ async function createUsuario(req, res) {
 async function getUsuario(req, res) {
     try {
         const {email, senha} = req.body;
+
+        console.log(email, senha);
 
         const usuario = await Usuario.findOne({email});
 

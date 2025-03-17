@@ -3,7 +3,6 @@ import Topico from "../components/Topico";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Responder from "../components/Responder";
-import SelectLanguage from "../components/SelectLanguage";
 import Resposta from "../components/Resposta";
 import { useTranslation } from "react-i18next";
 import Header from "../components/Header";
@@ -26,20 +25,27 @@ type tResposta = {
 };
 
 const Topic = () => {
-  let {id} = useParams<TopicParams>();
-  id = id as string;
-
-  useEffect(() => {
-    getTopic();
-  },[]);
 
   const [topico, setTopico] = useState<tTopico>({id:"",title:"",user:"",text:""});
   const [respostas, setRespostas] = useState<tResposta[]>([]);
   const [loaded, setLoaded] = useState<boolean>(false); 
   const { t, i18n } = useTranslation();
 
+  let {id} = useParams<TopicParams>();
+  id = id as string;
+
+  useEffect(() => { 
+    let language = sessionStorage.getItem("language");
+    if (!language) 
+      language = "pt";
+    i18n.changeLanguage(language);
+
+    getTopic();
+
+  },[]);
+
   async function getTopic(){
-    const url = "http://localhost:1099/topicos/" + id;
+    const url = "http://localhost:9875/api/topicos/" + id;
     setTopico({id:"",title:"",user:"",text:""});
     setRespostas([]);
 
@@ -68,9 +74,6 @@ const Topic = () => {
         :<div></div>
       }
       
-      <footer className="bg-blue-700 text-white p-4 position-absolute bottom-0 w-full">
-      </footer>
-
     </div>
   );
 };

@@ -22,28 +22,40 @@ const Cadastro = () => {
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const url = "http://localhost:9875/usuarios";
-    const result = await axios.post(url, {
-      nomeUsuario,
-      email,
-      senha,
-    });
+    const url = "http://localhost:9875/api/usuarios";
 
-    if (result.status == 200) {
-      console.log("Cadastro efetuado com sucesso");
-      //redirect to another page
-    } else {
+    try {
+
+      const result = await axios.post(url, {
+        nomeUsuario,
+        email,
+        senha,
+      });
+  
+      if (result.status == 201) {
+        console.log(result.data);
+
+        sessionStorage.setItem("token", result.data.token);
+        sessionStorage.setItem("idUsuario", result.data.idUsuario);
+        
+        console.log("Cadastro efetuado com sucesso");
+        
+        window.location.href = "/home"
+  
+      } else {
+        console.log("Erro ao efetuar cadastro");
+      }
+      
+    } catch (error) {
       console.log("Erro ao efetuar cadastro");
     }
+    
   }
-
 
   return (
     <div>
-      <Header texto={t("Registar")} changeLanguage={(e:string) => {i18n.changeLanguage(e);}}/>
-        
+      <Header texto={t("Cadastrar")} changeLanguage={(e:string) => {i18n.changeLanguage(e);}}/>
         <div className="container mt-4 text-center"  style={{ width: "40%" }}>
-
 
           <form action="" onSubmit={(e) => onSubmit(e)}>
            
@@ -77,67 +89,9 @@ const Cadastro = () => {
               type="submit"
               value="Criar Conta"
             />
-          </form>
-          </div>
-
-
-          {/*
-          
-          <Form>
-            <Form.Group className="mb-4 " controlId="formName">
-              <Form.Control type="text" placeholder="Nome" />
-            </Form.Group>
-
-            <Form.Select className="mb-4" aria-label="formGender" >
-              <option disabled>Genero</option>
-              <option value="M">Masculino</option>
-              <option value="F">Feminino</option>
-              <option value="O">Outro</option>
-            </Form.Select>
-
-            <Form.Group className="mb-4 " controlId="formBasicEmail">
-              <Form.Control type="email" placeholder="Email" />
-            </Form.Group>
-
-            <div className="grid grid-flow-col grid-cols-5">
-              <div className="col-start-1 col-end-6">
-                <Form.Group className="mb-4" controlId="formBasicPassword">
-                  <Form.Control
-                    type={showPass ? "password" : "text"}
-                    placeholder="Senha"
-                  />
-                </Form.Group>
-              </div>
-              <div>
-                <InputGroup className="col-start-7 justify-end h-9 ">
-                  <InputGroup.Text>
-                    <FontAwesomeIcon
-                      icon={showPass ? faEye : faEyeSlash}
-                      size="1x"
-                      width="20px"
-                      transform="left-1"
-                      onClick={clickHandler}
-                    />{" "}
-                  </InputGroup.Text>
-                </InputGroup>
-              </div>
-            </div>
-            <Form.Group className="mb-3">
-              <Form.Check
-                type="checkbox"
-                label="Li e concordo com os termos de uso da plataforma"
-              />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Entrar
-            </Button>
-          </Form>
-          
-          
-          */}
-          <footer className="bg-blue-700 text-white p-4 position-absolute bottom-0 w-full">
-          </footer>
+        </form>
       </div>
+    </div>
   );
 };
 

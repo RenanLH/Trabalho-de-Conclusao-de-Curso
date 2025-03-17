@@ -6,11 +6,13 @@ interface CardProps {
   user: string,
 }
 
-const Card = ({ id, title, user}: CardProps) => {
+const Card = ({title, user}: CardProps) => {
   const navigate = useNavigate();
 
   function redirectPage() {
-    navigate(`/topico/${id}`);
+    //navigate(`/topico/${id}`);
+    navigate(`/forum/`);
+
   }
 
   return (

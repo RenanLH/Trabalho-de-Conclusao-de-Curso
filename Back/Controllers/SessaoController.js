@@ -2,9 +2,13 @@ import Sessao from '../Models/Sessao.js';
 import Usuario from '../Models/Usuario.js';
 import bcrypt from "bcrypt";
 import crypto from "crypto";
+
+
 async function createSessao(req, res) {
     try {
         const {email, senha} = req.body;
+
+        console.log(email, senha);
 
         const usuario = await Usuario
             .findOne({email});
@@ -27,6 +31,8 @@ async function createSessao(req, res) {
             dataCriacao,
             dataExpiracao
         });
+
+        console.log(createdSessao);
 
         return res.status(201).send(createdSessao); 
 

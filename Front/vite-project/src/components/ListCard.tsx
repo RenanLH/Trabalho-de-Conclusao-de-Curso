@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Card from "./Card";
-import { useTranslation } from "react-i18next";
 import axios from "axios";
 
 type TopicDB = {
@@ -13,7 +12,6 @@ type TopicDB = {
 const ListCard = () => {
 
   const [topics, setTopics] = useState<TopicDB[]> ([]);
-  const { t } = useTranslation();
 
   useEffect(() => {
     getTopics()
@@ -21,7 +19,7 @@ const ListCard = () => {
   
 
   async function getTopics() {
-    const url = "http://localhost:9875/topicos"
+    const url = "http://localhost:9875/api/topicos"
     setTopics([]);
 
     const result = await axios.get(url);
@@ -30,41 +28,7 @@ const ListCard = () => {
       setTopics(result.data as TopicDB[]);
     }
   }
-  /*
 
-  const list = [
-    <Card
-      title={t("ForumTitulo1")}
-      user={t("ForumUsuario")}
-      text={t("ForumTexto1")}
-    />,
-    <Card
-      title={t("ForumTitulo2")}
-      user={t("ForumUsuario")}
-      text={t("ForumTexto2")}
-    />,
-    <Card
-      title={t("ForumTitulo3")}
-      user={t("ForumUsuario")}
-      text={t("ForumTexto3")}
-    />,
-    <Card
-      title={t("ForumTitulo4")}
-      user={t("ForumUsuario")}
-      text={t("ForumTexto4")}
-    />,
-    <Card
-      title={t("ForumTitulo5")}
-      user={t("ForumUsuario")}
-      text={t("ForumTexto5")}
-    />,
-    <Card
-      title={t("ForumTitulo6")}
-      user={t("ForumUsuario")}
-      text={t("ForumTexto6")}
-    />,
-  ];
-*/
   return (
     <div>
       <ul className="grid grid-flow-row sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4">

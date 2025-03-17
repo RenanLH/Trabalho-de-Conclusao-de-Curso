@@ -8,6 +8,7 @@ import logo_mail from "../assets/mail-svgrepo-com.svg"
 import SearchBar from "./SearchBar";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import SelectLogin from "./SelectLogin";
 
 const Navbar = () => {
 
@@ -57,7 +58,7 @@ const Navbar = () => {
           <p className="mt-2">{t("Forum")}</p>
         </div>
 
-        {!isLogged && (
+        {isLogged && (
           <div className="flex items-center gap-2 mb-4">
             <Link to="/mensagens">
               <img className="h-10" src={logo_mail} alt="Mensagens" />
@@ -69,13 +70,13 @@ const Navbar = () => {
         <div className="flex items-center gap-2 mb-4">
           {isLogged ? (
             <div className="flex items-center gap-2">
-              <Link to="/login">
-                <img className="h-10" src={logo_login} alt="Logout" />
-              </Link>
-              <p className="mt-2">Conta</p>
+              <img className="h-10" src={logo_login} alt="Logout" />
+              <div>
+                <SelectLogin/>
+              </div>
             </div>
           )
-      : 
+          : 
           (
             <div className="flex items-center gap-2">
               <Link to="/login">
@@ -84,8 +85,6 @@ const Navbar = () => {
               <p className="mt-2">{t("Login")}</p>
             </div>
           )}
-
-
           
         </div>
       </div>

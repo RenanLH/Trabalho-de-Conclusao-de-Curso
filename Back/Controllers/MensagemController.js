@@ -1,9 +1,24 @@
 import Mensagem from "../Models/Mensagem.js";
+import Sessao from "../Models/Sessao.js";
 import Usuario from "../Models/Usuario.js";
+
+
+const role = {
+    ADMIN:'admin',
+    USER:'user',
+}
 
  async function createMensagem(req, res) {
     try {
-        const {idUsuario, conteudoMensagem} = req.body;
+        const {idUsuario,token, conteudoMensagem} = req.body;
+
+        const validaUsuario = await Sessao.findOne({
+            idUsuario, 
+            token
+        });
+
+        if (!validaUsuario)
+            return res.status(404).send("Usuario nao encontrado");
 
         let statusMensagem = Mensagem.statusMensagem.NF;
 
@@ -53,13 +68,50 @@ import Usuario from "../Models/Usuario.js";
     try {
         const {idUsuario} = req.params;
 
+        const usuario = await Usuario.findById(idUsuario);
+
+        console.log(usuario);
+
+        if (!usuario)
+            return res.status(404).send("Usuario nao encontrado");
+
+        if (usuario.role === role.ADMIN){
+            const mensagens = await Mensagem.model.find();
+            
+            if (!mensagens || !mensagens.length)
+                return res.status(404).send("Nenhuma mensagem encontrada");
+
+            for (const mensage of mensagens){
+                let id = mensage.idUsuario.toString();
+
+                let usuario = await Usuario.findById(id);
+
+                console.log(usuario + "  admiin ");
+
+                if (usuario)
+                    mensage.nomeUsuario = usuario.nomeUsuario;
+
+            }
+
+            return res.status(200).send(mensagens);
+        }
+
         const mensagens = await Mensagem.model.find({
             idUsuario,
         })
         if (!mensagens || !mensagens.length)
             return res.status(404).send("Nenhuma mensagem encontrada");
 
-        console.log(mensagens);
+        for (const mensage of mensagens){
+            let id = mensage.idUsuario.toString();
+
+            let usuario = await Usuario.findById(id);
+
+            if (usuario)
+                mensage.nomeUsuario = usuario.nomeUsuario;
+
+        }
+
         return res.status(200).send(mensagens);
 
     } catch (error) {

@@ -1,19 +1,6 @@
 import Duvida from "./Duvida";
-  import { useTranslation } from "react-i18next";
-  import axios from "axios";
-  import { useState, useEffect } from "react";
-
-
-type Question = {
-  questionPT: string,
-  awnserPT: string,
-
-  questionES: string,
-  awnserES: string,
-
-  questionEN: string,
-  awnserEN: string,
-};
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 type QuestionDB = {
   pergunta: string,
@@ -21,7 +8,6 @@ type QuestionDB = {
 };
 
 const ListDuvida = () => {
-  const { t } = useTranslation();
 
   const [duvidas, setDuvidas] = useState<JSX.Element[]>([])
 
@@ -31,7 +17,7 @@ const ListDuvida = () => {
 
 
   async function getQuestions(){
-    const url = "http://localhost:9875/pergunta";
+    const url = "http://localhost:9875/api/pergunta";
 
     setDuvidas([]);
 
@@ -48,15 +34,6 @@ const ListDuvida = () => {
     }
     
   }
-
-   /*duvidas = [
-    <Duvida question={t("Duvida1")} answer={t("Resposta1")} />,
-    <Duvida question={t("Duvida2")} answer={t("Resposta2")} />,
-    <Duvida question={t("Duvida3")} answer={t("Resposta3")} />,
-    <Duvida question={t("Duvida4")} answer={t("Resposta4")} />,
-    <Duvida question={t("Duvida5")} answer={t("Resposta5")} />,
-    <Duvida question={t("Duvida6")} answer={t("Resposta6")} />,
-  ];*/
 
   return (
     <div>

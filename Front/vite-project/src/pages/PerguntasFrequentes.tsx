@@ -19,15 +19,20 @@ type QaA = {
 const PerguntasFrequentes = () => {
   const { t, i18n } = useTranslation();
   const [duvidas, setDuvidas] = useState<QaA[]>([])
-  const [duvidasDB, setDuvidasDB] = useState<QaADB[]>([])
 
-  useEffect(() => {
-    getQuestions()
+  useEffect(() => { 
+    let language = sessionStorage.getItem("language");
+    if (!language) 
+      language = "pt";
+    i18n.changeLanguage(language);
+
+    getQuestions();
+
   },[]);
 
 
   async function getQuestions(){
-    const url = "http://localhost:9875/duvidas";
+    const url = "http://localhost:9875/api/duvidas";
 
     setDuvidas([]);
 
@@ -39,9 +44,6 @@ const PerguntasFrequentes = () => {
       console.log(resultArray.length);
       
       resultArray.map((it, _index) => {
-        //const element =  <Duvida question={it.questionPT} answer={it.awnserPT}/>
-       setDuvidasDB((prev) => [it, ...prev]);
-
         const duvida = {question: it.pergunta, awnser: it.resposta};
 
         setDuvidas((prev) => [duvida, ...prev]);
@@ -51,59 +53,22 @@ const PerguntasFrequentes = () => {
     
   }
 
- function onChangeLanguage(language: String){
-    setDuvidas([]);
-    if (language == "pt"){
-      duvidasDB.map((it, _index) => {
-        //const element =  <Duvida question={it.questionPT} answer={it.awnserPT}/>
-
-        let duvida = {question: it.pergunta, awnser: it.resposta};
-
-        setDuvidas((prev) => [duvida, ...prev]);
-      });
-    }
-    else if(language == "es") {
-      duvidasDB.map((it, _index) => {
-        //const element =  <Duvida question={it.questionPT} answer={it.awnserPT}/>
-        let duvida = {question: it.pergunta, awnser: it.resposta};
-        if (duvida.question == "" && duvida.awnser == ""){
-          duvida = {question: it.pergunta, awnser: it.resposta }
-        }   
-        setDuvidas((prev) => [duvida, ...prev]);
-      });
-    }
-
-    else if(language == "en") {
-      duvidasDB.map((it, _index) => {
-        //const element =  <Duvida question={it.questionPT} answer={it.awnserPT}/>
-        let duvida = {question: it.pergunta, awnser: it.resposta};
-
-        if (it.pergunta == "" && it.resposta == ""){
-
-          duvida = {question: it.pergunta, awnser: it.resposta }
-        }   
-        setDuvidas((prev) => [duvida, ...prev]);
-      });
-    }
- }
-
   return (
     <div>
+      <body className="min-h-screen">
         <Header texto={t("Perguntas_Frequentes")} changeLanguage={(e:string) => {i18n.changeLanguage(e);}}/>
 
-      <div className=" flex-auto text-center">
-      </div>
-      <div className="flex flex-row sm:justify-start lg:justify-center mt-12">
-        <div className=" rounded-lg container mx-auto">
+        <div className="flex flex-row sm:justify-start lg:justify-center mt-12">
+          <div className=" rounded-lg container mx-auto">
 
-          {duvidas.map((item, index)=> 
-            <Duvida question={item.question} answer={item.awnser} key={index}/>
-          )}
+            {duvidas.map((item, index)=> 
+              <Duvida question={item.question} answer={item.awnser} key={index}/>
+            )}
 
+          </div>
         </div>
-      </div>
-      <footer className="bg-blue-700 text-white p-4 position-absolute bottom-0 w-full">
-      </footer>
+      </body>
+      
     </div>
   );
 };

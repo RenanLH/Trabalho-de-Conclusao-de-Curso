@@ -9,6 +9,7 @@ import Topico from "./pages/Topico";
 import Login from "./pages/Login";
 import Mensagens from "./pages/Mesagens";
 import Mensagem from "./pages/Mensagem";
+import NovaMensagem from "./pages/NovaMensagem";
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/topico/:id" element={<Topico />} />
           <Route path="/login" element={<Login/>}/>
+          <Route path="/home" element={<Home />} />
+          <Route path="/mensagem/nova" element={<NovaMensagem/>}/>
         </Routes>
       </div>
     </>

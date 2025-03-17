@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "dev": "npx nodemon --delay 1 ./src/index.js"
+    "dev": "yarn node index.js"
   },
   "type": "module",
   "dependencies": {
