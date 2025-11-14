@@ -6,6 +6,7 @@ import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import Header from "../components/Header";
 import { useTranslation } from "react-i18next";
+import { API_BASE_URL } from "../config";
 
 library.add(fab, faEyeSlash, faEye);
 
@@ -22,7 +23,7 @@ const Cadastro = () => {
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const url = "http://localhost:9875/api/usuarios";
+    const url = `${API_BASE_URL}/usuarios`;
 
     try {
 
@@ -54,7 +55,7 @@ const Cadastro = () => {
 
   return (
     <div>
-      <Header texto={t("Cadastrar")} changeLanguage={(e:string) => {i18n.changeLanguage(e);}}/>
+      <Header texto={t("Cadastro")} changeLanguage={(e:string) => {i18n.changeLanguage(e);}}/>
         <div className="container mt-4 text-center"  style={{ width: "40%" }}>
 
           <form action="" onSubmit={(e) => onSubmit(e)}>
@@ -73,19 +74,23 @@ const Cadastro = () => {
               value={email}
             />
 
-            <div className="flex gap-3  items-center ">
-              <input className=" p-3 w-full h-1/2 rounded bg-gray-300"
-                type={showPass ? "password" : "text"}
-                placeholder="Senha"
+            <div className="relative w-full">
+              <input
+                className="p-3 w-full rounded bg-gray-300 pr-10"
+                type={!showPass ? "password" : "text"}
+                placeholder={t("Senha")}
                 onChange={(e) => setSenha(e.target.value)}
-                value={senha}/>
+                value={senha}
+              />
               <FontAwesomeIcon
-                        icon={showPass ? faEye : faEyeSlash}
-                        onClick={clickHandler}/>
+                icon={showPass ? faEye : faEyeSlash}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                onClick={clickHandler}
+              />
             </div>
-            
+
             <input
-              className="mb-4 mt-2 p-3 rounded text-white bg-black"
+              className="mb-4 mt-2 p-3  text-white bg-green-600 rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               type="submit"
               value="Criar Conta"
             />

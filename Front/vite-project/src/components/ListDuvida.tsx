@@ -1,6 +1,7 @@
 import Duvida from "./Duvida";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { API_BASE_URL } from "../config";
 
 type QuestionDB = {
   pergunta: string,
@@ -17,7 +18,7 @@ const ListDuvida = () => {
 
 
   async function getQuestions(){
-    const url = "http://localhost:9875/api/pergunta";
+    const url = `${API_BASE_URL}/pergunta`;
 
     setDuvidas([]);
 

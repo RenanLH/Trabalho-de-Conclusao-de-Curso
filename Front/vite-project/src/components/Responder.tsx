@@ -1,5 +1,6 @@
 import axios from "axios";
 import { FormEvent, useState } from "react";
+import { API_BASE_URL } from "../config";
 
 type ResponderParams = {
     idMensagem: string;
@@ -15,10 +16,10 @@ const responder = (param:ResponderParams) =>{
     async function onSubmit(e:FormEvent<HTMLFormElement>){
         e.preventDefault();
 
-        let url = "http://localhost:9875/api/respostas/mensagem";
+        let url = `${API_BASE_URL}/respostas/mensagem`;
 
         if(idMensagem == "" || idUsuario == ""){
-            url = "http://localhost:9875/api/mensagens";
+            url = `${API_BASE_URL}/mensagens`;
             idUsuario = sessionStorage.getItem("idUsuario") || "";
             const token = sessionStorage.getItem("token") || "";
             if(idUsuario == ""){
@@ -60,10 +61,13 @@ const responder = (param:ResponderParams) =>{
             <div className="p-2 ml-6 mr-3 ">
                 <form action="submit" onSubmit={(e) => onSubmit(e)}>
                     <div className="flex flex-col  ">
-                        <textarea className="h-32 border-2  border-blue-800 rounded" value={conteudoResposta} onChange={(e) => setConteudoResposta(e.target.value)}/>
+                        <textarea className="h-32 border-2  border-blue-800 rounded" value={conteudoResposta} onChange={(e) => setConteudoResposta(e.target.value)} required />
                     </div>
                     <div className="flex justify-end">
-                        <button disabled={conteudoResposta == ""}  className="border justify-center p-2 w-28 rounded mb-4  text-white bg-black" type="submit">Enviar</button>
+                        <button 
+                        disabled={conteudoResposta == ""} 
+                        className="mt-3 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                        type="submit">Enviar</button>
                     </div>
                 </form>
             </div>

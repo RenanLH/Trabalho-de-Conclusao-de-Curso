@@ -4,6 +4,7 @@ import logo_mensagem from "../assets/message-circle-lines-svgrepo-com.svg";
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { API_BASE_URL } from "../config";
 
 type Mensagem = {
     _id: string,
@@ -32,7 +33,7 @@ const ListMensagens = () => {
 
   async function getMensagens() {
     const idUsuario = sessionStorage.getItem("idUsuario");
-    const url = `http://localhost:9875/api/mensagens/usuario/${idUsuario}`
+    const url = `${API_BASE_URL}/mensagens/usuario/${idUsuario}`
     setMensagens([]);
 
     try{

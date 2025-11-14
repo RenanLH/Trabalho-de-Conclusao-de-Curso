@@ -10,7 +10,6 @@ const Card = ({title, user}: CardProps) => {
   const navigate = useNavigate();
 
   function redirectPage() {
-    //navigate(`/topico/${id}`);
     navigate(`/forum/`);
 
   }

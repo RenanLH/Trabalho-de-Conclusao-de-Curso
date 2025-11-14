@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Card from "./Card";
 import axios from "axios";
+import { API_BASE_URL } from "../config";
 
 type TopicDB = {
   idTopico: string,
@@ -19,7 +20,7 @@ const ListCard = () => {
   
 
   async function getTopics() {
-    const url = "http://localhost:9875/api/topicos"
+    const url = `${API_BASE_URL}/topicos`
     setTopics([]);
 
     const result = await axios.get(url);

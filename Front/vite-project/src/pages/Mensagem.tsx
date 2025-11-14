@@ -6,6 +6,7 @@ import Responder from "../components/Responder";
 import Resposta from "../components/Resposta";
 import Header from "../components/Header";
 import { useTranslation } from "react-i18next";
+import { API_BASE_URL } from "../config";
 
 type MensagemParams = {
   id: string;
@@ -54,7 +55,8 @@ const Mensagem = () => {
   const [respostas, setRespostas] = useState<tResposta[]>([]);
 
   async function getMensagem(){
-    let url = "http://localhost:9875/api/mensagens/id/" + id;
+    let url = `${API_BASE_URL}/mensagens/id/` + id;
+    
     setRespostas([]);
 
     let result = await axios.get(url);
@@ -67,8 +69,8 @@ const Mensagem = () => {
       setIdUsuario(mensagem.idUsuario);
       setIdMessage(mensagem._id);
       setTopico({id:mensagem._id, title:"", user: mensagem.nomeUsuario, text:mensagem.conteudoMensagem});
-  
-      url = "http://localhost:9875/api/respostas/mensagem/" + id;
+      url = `${API_BASE_URL}/respostas/mensagem/` + id;
+
       result = await axios.get(url);
 
       if (result.status == 200){
