@@ -2,10 +2,10 @@ import Mensagem from "../Models/Mensagem.js";
 import Sessao from "../Models/Sessao.js";
 import Usuario from "../Models/Usuario.js";
 
-const statusMensagem = {
-    "F": "Finalizada",
-    "R": "Respondida",
-    "NR": "Nao Respondida",
+const status = {
+    F: "Finalizada",
+    R: "Respondida",
+    NR: "Nao Respondida",
 }
 
 const role = {
@@ -26,14 +26,7 @@ async function createMensagem(req, res) {
     if (!validaUsuario)
       return res.status(404).send("Usuario nao encontrado");
 
-    let statusMensagem = Mensagem.statusMensagem.NF;
-
-    const mensagemNaoFinalizada = await Mensagem.findOne({
-      idUsuario,
-      statusMensagem
-    });
-
-    statusMensagem = Mensagem.statusMensagem.NR;
+    const statusMensagem = status.NR;
 
     const mensagemNaoRespondida = await Mensagem.findOne({
       idUsuario,
@@ -41,11 +34,9 @@ async function createMensagem(req, res) {
     });
 
 
-    if (mensagemNaoRespondida || mensagemNaoFinalizada) {
+    if (mensagemNaoRespondida) {
       return res.status(400).send('Uma mensagem já foi enviada, espere até que seja respondida.');
     }
-
-    statusMensagem = Mensagem.statusMensagem.NR;
 
     const dataEnvio = Date.now();
 
@@ -68,6 +59,7 @@ async function createMensagem(req, res) {
     return res.status(201).send(createdMensagem);
 
   } catch (error) {
+    console.log(error);
     return res.status(400).send(error);
   }
 
