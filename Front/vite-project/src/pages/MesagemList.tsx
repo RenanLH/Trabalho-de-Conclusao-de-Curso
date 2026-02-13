@@ -6,7 +6,7 @@ import Header from "../components/Header";
 import MensagemCard from "../components/MensagemCard";
 import logo_mensagem from "../assets/message-circle-lines-svgrepo-com.svg";
 import { API_BASE_URL } from "../util/config";
-import { formatDate, isAdmin, isLogged } from "../util/util";
+import { formatDate, isLogged } from "../util/util";
 
 type MensagemType = {
   _id: string,
@@ -47,7 +47,6 @@ const Mensagens = () => {
     window.location.href = "/mensagem/nova";
   }
 
-
   async function getMensagens() {
     const idUsuario = sessionStorage.getItem("idUsuario");
     const url = `${API_BASE_URL}/mensagens/usuario/${idUsuario}`
@@ -63,14 +62,11 @@ const Mensagens = () => {
       }
       setLoaded(true);
 
-
     } catch (e) {
       console.log("Erro ao buscar mensagens");
       setLoaded(true);
     }
-
   }
-
 
   return (
     <div className="bg-gray-100 dark:bg-slate-800/80 min-h-screen flex flex-col">

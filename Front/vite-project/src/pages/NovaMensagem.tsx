@@ -22,7 +22,6 @@ const NovaMensagem = () => {
   const isTooShort = charCount > 0 && charCount < minLength;
   const isTooLong = charCount > 0 && charCount > maxLength;
 
-
   useEffect(() => {
 
     let theme = sessionStorage.getItem("theme");

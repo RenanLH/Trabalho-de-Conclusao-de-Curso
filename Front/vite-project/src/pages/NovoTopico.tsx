@@ -14,7 +14,6 @@ const NovoTopico = () => {
   const [conteudo, setConteudo] = useState<string>("");
   const [notification, setNotification] = useState<boolean>(false);
   const [notifType, setNotifType] = useState<'success' | 'error'>('error')
-  const [notifTy, setNotifTpe] = useState<() => void>()
   const maxLength = 100;
   const minLength = 10;
   const charCount = titulo.length;
@@ -50,7 +49,6 @@ const NovoTopico = () => {
 
     if (!isAdmin()) {
       setNotification(true);
-      setNotifTpe(() => { window.location.href = "/forum" })
       return;
     }
 
@@ -71,7 +69,6 @@ const NovoTopico = () => {
       }).then((res) => {
         if (res.status == 201) {
           setNotifType('success');
-          setNotifTpe(() => { })
           setNotification(true);
 
         }

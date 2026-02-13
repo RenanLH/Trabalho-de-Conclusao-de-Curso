@@ -13,7 +13,7 @@ interface UserMenuProps {
   showComponent: (b: boolean) => void;
 }
 
-const UserMenu: React.FC<UserMenuProps> = ({ showComponent, onLogout, onNavigate, toggleTheme, isDarkMode }) => {
+const UserMenu: React.FC<UserMenuProps> = ({ onLogout, onNavigate, toggleTheme, isDarkMode }) => {
 
   const { t } = useTranslation();
   const [nomeUsuario, setNomeUsuario] = useState<string>("");

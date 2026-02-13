@@ -25,13 +25,11 @@ type tMensagem = {
 
 };
 
-
 const MensagemPage = () => {
   let { id } = useParams<MensagemParams>();
   id = id as string;
   const { i18n } = useTranslation();
   const [mensagem, setMensagem] = useState<tMensagem>({ _id: "", idUsuario: "", conteudoMensagem: "", tituloMensagem: "", nomeUsuario: "", dataEnvio: "", statusMensagem: "" });
-  const [idUsuario, setIdUsuario] = useState<string>("");
   const [loaded, setLoaded] = useState<boolean>(false);
   const [respostas, setRespostas] = useState<tMensagem[]>([]);
   const [conteudoMensagem, setConteudoMensagem] = useState<string>("")
@@ -121,7 +119,6 @@ const MensagemPage = () => {
 
           const mensagemBD: tMensagem = res.data;
 
-          setIdUsuario(mensagemBD.idUsuario);
           setMensagem(({
             _id: mensagemBD._id, idUsuario: mensagemBD.idUsuario, conteudoMensagem: mensagemBD.conteudoMensagem, tituloMensagem: mensagemBD.tituloMensagem,
             nomeUsuario: mensagemBD.nomeUsuario, dataEnvio: mensagemBD.dataEnvio, statusMensagem: mensagemBD.statusMensagem
@@ -142,7 +139,6 @@ const MensagemPage = () => {
         const respostas = result.data as tMensagem[];
         respostas.map((item, _index: number) => {
           setRespostas((prev) => [...prev, item]);
-          setIdUsuario(item.idUsuario);
         });
       }
     });
@@ -150,7 +146,6 @@ const MensagemPage = () => {
   }
 
   function validateResposta() {
-    //return (loggedUser != idUsuario)
     return mensagem.statusMensagem != statusMensagem.F;
   }
 
@@ -158,8 +153,8 @@ const MensagemPage = () => {
     <div className="bg-gray-100 dark:bg-slate-800/80 min-h-screen">
 
       <Header texto={mensagem.tituloMensagem} translate={true} />
-      {loaded ? 
-      
+      {loaded ?
+
         <div className="flex flex-col">
           <Mensagem user={mensagem.nomeUsuario} status={mensagem.statusMensagem} text={mensagem.conteudoMensagem} date={mensagem.dataEnvio} />
           {respostas.map((item, _index) => (
@@ -171,12 +166,12 @@ const MensagemPage = () => {
             </div>
           }
 
-        <Notification isOpen={notification} type={"error"} mensagem={"Erro: Usuário não cadastrado"} onCancel={() => setNotification(!notification)} onLogin={true} onConfirm={() => setNotification(!notification)} />
+          <Notification isOpen={notification} type={"error"} mensagem={"Erro: Usuário não cadastrado"} onCancel={() => setNotification(!notification)} onLogin={true} onConfirm={() => setNotification(!notification)} />
 
         </div>
         :
         <div>
-              <h1 className="text-center text-4xl">Erro ao carregar mensagem</h1>
+          <h1 className="text-center text-4xl">Erro ao carregar mensagem</h1>
 
         </div>
       }

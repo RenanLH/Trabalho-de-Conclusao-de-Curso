@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import Header from "../components/Header";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const Home = () => {
   const { t, i18n } = useTranslation();
