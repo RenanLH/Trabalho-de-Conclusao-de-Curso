@@ -1,111 +1,188 @@
 import { useParams } from "react-router-dom";
-import Topico from "../components/Topico";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import Responder from "../components/Responder";
-import Resposta from "../components/Resposta";
 import Header from "../components/Header";
 import { useTranslation } from "react-i18next";
-import { API_BASE_URL } from "../config";
+import { API_BASE_URL, BASE_URL } from "../util/config";
+import Mensagem from "../components/Mesagem";
+import { isLogged, statusMensagem } from "../util/util";
+import Notification from "../components/Notification";
+import { io, Socket } from 'socket.io-client';
 
 type MensagemParams = {
   id: string;
 };
 
-type tTopico = {
-  id: string;
-  title: string;
-  user: string;
-  text: string;
-};
-
-type tResposta = {
+type tMensagem = {
   _id: string;
   idUsuario: string;
-  idResposta: string;
-  idMensagem: string;
-  nomeUsuario: string;
-  conteudoResposta: string;
+  tituloMensagem: string;
+  conteudoMensagem: string;
+  statusMensagem: string;
   dataEnvio: string;
+  nomeUsuario: string;
+
 };
 
-const Mensagem = () => {
-  let {id} = useParams<MensagemParams>();
+
+const MensagemPage = () => {
+  let { id } = useParams<MensagemParams>();
   id = id as string;
+  const { i18n } = useTranslation();
+  const [mensagem, setMensagem] = useState<tMensagem>({ _id: "", idUsuario: "", conteudoMensagem: "", tituloMensagem: "", nomeUsuario: "", dataEnvio: "", statusMensagem: "" });
+  const [idUsuario, setIdUsuario] = useState<string>("");
+  const [loaded, setLoaded] = useState<boolean>(false);
+  const [respostas, setRespostas] = useState<tMensagem[]>([]);
+  const [conteudoMensagem, setConteudoMensagem] = useState<string>("")
+  const [notification, setNotification] = useState<boolean>(false);
+  const socketRef = useRef<Socket | null>(null);
 
+  useEffect(() => {
 
-  useEffect(() => { 
+    let theme = sessionStorage.getItem("theme");
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    }
+
+    if (!isLogged()) {
+      window.location.href = "/login";
+    }
+
     let language = sessionStorage.getItem("language");
-    if (!language) 
-      language = "pt";
-    i18n.changeLanguage(language);
-
+    if (language) {
+      i18n.changeLanguage(language);
+    }
 
     getMensagem();
-   
-  },[]);
- 
 
-  const { t, i18n } = useTranslation();
-  const [topico, setTopico] = useState<tTopico>({id:"",title:"",user:"",text:""});
-  const [idUsuario, setIdUsuario] = useState<string>("");
-  const [idMessage, setIdMessage] = useState<string>("");
-  const [idResposta, setIdResposta] = useState<string|undefined>(undefined);
-  const [loaded, setLoaded] = useState<boolean>(false);
-  const [respostas, setRespostas] = useState<tResposta[]>([]);
+    if (!socketRef.current) {
+      socketRef.current = io(BASE_URL);
+    }
 
-  async function getMensagem(){
+    const socket = socketRef.current;
+
+    socket.emit('join', id);
+
+    socket.on('nova_mensagem', (data) => {
+      console.log("NOVA MENSASAGEMME " + data);
+      setRespostas((prev) => [...prev, {
+        _id: data._id, idUsuario: data.idUsuario,
+        conteudoMensagem: data.conteudoMensagem, tituloMensagem: "", nomeUsuario: data.nomeUsuario,
+        dataEnvio: data.dataEnvio, statusMensagem: data.statusMensagem
+      }])
+    });
+
+    return () => {
+      socket.off("nova_mensagem");
+      socket.disconnect();
+      socketRef.current = null;
+    };
+
+  }, [id]);
+
+
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const token = sessionStorage.getItem("token") || "";
+    let idUsuario = sessionStorage.getItem("idUsuario") || "";
+
+    if (!isLogged()) {
+      setNotification(true);
+      return;
+    }
+
+    let url = `${API_BASE_URL}/mensagens/responder/`;
+
+    await axios.post(url, {
+      idUsuario: idUsuario,
+      token: token,
+      idMensagem: id,
+      conteudoMensagem: conteudoMensagem
+    }).then((res) => {
+      if (res.status == 201) {
+        setConteudoMensagem("");
+      }
+    });
+
+  }
+
+  async function getMensagem() {
     let url = `${API_BASE_URL}/mensagens/id/` + id;
-    
+    let token = sessionStorage.getItem("token");
     setRespostas([]);
 
-    let result = await axios.get(url);
+    await axios.post(url, {
+      token: token,
+    })
+      .then(function (res) {
+        if (res.status == 200) {
+          setLoaded(true);
 
-    if (result.status == 200){
-      setLoaded(true);
-      
-      const mensagem = result.data;
+          const mensagemBD: tMensagem = res.data;
 
-      setIdUsuario(mensagem.idUsuario);
-      setIdMessage(mensagem._id);
-      setTopico({id:mensagem._id, title:"", user: mensagem.nomeUsuario, text:mensagem.conteudoMensagem});
-      url = `${API_BASE_URL}/respostas/mensagem/` + id;
+          setIdUsuario(mensagemBD.idUsuario);
+          setMensagem(({
+            _id: mensagemBD._id, idUsuario: mensagemBD.idUsuario, conteudoMensagem: mensagemBD.conteudoMensagem, tituloMensagem: mensagemBD.tituloMensagem,
+            nomeUsuario: mensagemBD.nomeUsuario, dataEnvio: mensagemBD.dataEnvio, statusMensagem: mensagemBD.statusMensagem
+          }));
 
-      result = await axios.get(url);
+        }
+      })
+      .catch(function (error) {
+        if (error.response) { window.location.href = "/mensagens"; }
+      })
 
-      if (result.status == 200){
-        const respostas = result.data as tResposta[];
+    url = `${API_BASE_URL}/mensagens/respostas/` + id;
+
+    await axios.post(url, {
+      token: token,
+    }).then(function (result) {
+      if (result.status == 200) {
+        const respostas = result.data as tMensagem[];
         respostas.map((item, _index: number) => {
           setRespostas((prev) => [...prev, item]);
-          setIdResposta(item.idResposta);
           setIdUsuario(item.idUsuario);
         });
       }
-    }
+    });
+
   }
 
-  function validateResposta(){
-    const loggedUser = sessionStorage.getItem("idUsuario");
-    return (loggedUser != idUsuario)
+  function validateResposta() {
+    //return (loggedUser != idUsuario)
+    return mensagem.statusMensagem != statusMensagem.F;
   }
 
   return (
-    <div>
+    <div className="bg-gray-100 dark:bg-slate-800/80 min-h-screen">
 
-      <Header texto={t("Mensagem")} changeLanguage={(e:string) => {i18n.changeLanguage(e)}}/>
+      <Header texto={mensagem.tituloMensagem} translate={true} />
       {loaded ? 
+      
         <div className="flex flex-col">
-          <Topico title={""} user={topico.user} text={topico.text} />
+          <Mensagem user={mensagem.nomeUsuario} status={mensagem.statusMensagem} text={mensagem.conteudoMensagem} date={mensagem.dataEnvio} />
           {respostas.map((item, _index) => (
-            <Resposta user={item.nomeUsuario} text={item.conteudoResposta}/>
+            <Mensagem user={item.nomeUsuario} status={item.statusMensagem} text={item.conteudoMensagem} date={item.dataEnvio} />
           ))}
-          {validateResposta() && <Responder idMensagem={idMessage} idResposta={idResposta} idUsuario={idUsuario}/>}	
-        </div>  
-      : <div></div>
+          {validateResposta() &&
+            <div className="flex">
+              <Responder onChangeResposta={setConteudoMensagem} onSubmit={onSubmit} conteudoResposta={conteudoMensagem} textoBotao={"Enviar a Mensagem"} />
+            </div>
+          }
+
+        <Notification isOpen={notification} type={"error"} mensagem={"Erro: Usuário não cadastrado"} onCancel={() => setNotification(!notification)} onLogin={true} onConfirm={() => setNotification(!notification)} />
+
+        </div>
+        :
+        <div>
+              <h1 className="text-center text-4xl">Erro ao carregar mensagem</h1>
+
+        </div>
       }
-  
+
     </div>
   );
 };
 
-export default Mensagem;
+export default MensagemPage;

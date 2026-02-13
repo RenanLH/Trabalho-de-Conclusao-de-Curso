@@ -1,5 +1,5 @@
-import Mensagem from "../Models/Mensagem.js";
 import Resposta from "../Models/Resposta.js";
+import Topico from "../Models/Topico.js";
 import Usuario from "../Models/Usuario.js";
 
 async function sortRespostas(respostaArray) {
@@ -32,10 +32,10 @@ async function sortRespostas(respostaArray) {
 
 async function getRespostas(req, res) {
     try {
-        const {idMensagem} = req.params;
+        const {idResposta} = req.params;
 
         let respostas = await Resposta.find(
-            {idMensagem}
+            {idResposta}
         );
 
         if (!respostas || !respostas.length)
@@ -55,7 +55,37 @@ async function getRespostas(req, res) {
         return res.status(200).send(respostas);
 
     } catch (error) {
-        console.log(error);
+        return res.status(400).send("error");
+    }
+    
+}
+
+
+async function getRespostasTopico(req, res) {
+    try {
+        const {idTopico} = req.params;
+
+        let respostas = await Resposta.find(
+            {idTopico}
+        );
+
+        if (!respostas || !respostas.length)
+            return res.status(404).send("Nenhuma resposta encontrada");
+
+
+        for (const resposta of respostas){
+            let id = resposta.idUsuario.toString();
+
+            let usuario = await Usuario.findById(id);
+
+            if (usuario)
+                resposta.nomeUsuario = usuario.nomeUsuario;
+
+        }
+
+        return res.status(200).send(respostas);
+
+    } catch (error) {
         return res.status(400).send("error");
     }
     
@@ -64,37 +94,76 @@ async function getRespostas(req, res) {
 async function createResposta(req, res) {
 
     try {
+        const {idUsuario, idResposta, conteudoResposta} = req.body;
 
-        const {idUsuario, idMensagem, idResposta, conteudoResposta} = req.body;
-        let nomeUsuario = "";
-        console.log('a ',idUsuario, 'b ', idMensagem, 'c', idResposta, 'd ',conteudoResposta);
-
-        const mensagem = await Mensagem.model.findById(
-            idMensagem
+        const respostaOriginal = await Resposta.findById(
+            idResposta
         );
 
-        if (!mensagem){
-            return res.status(400).send("Mensagem nao encontrada");
+        if (!respostaOriginal){
+            return res.status(400).send("Resposta nao encontrada");
         }
 
         const usuario = await Usuario.findById(idUsuario);
 
-        if (usuario){
-            nomeUsuario = usuario.nomeUsuario;
+        if (!usuario){
+            return res.status(400).send("Usuario nao encontrado");
         }
 
-
-        //if (mensagem.idUsuario == idUsuario){
-        //    return res.status(400).send("Erro nao eh possivel responder a propria mensagem");
-        //}
+        const nomeUsuario = usuario.nomeUsuario;
 
         const dataEnvio = Date.now();
 
         const resposta = await Resposta.create({
             idUsuario,
             nomeUsuario,
-            idMensagem,
             idResposta, 
+            conteudoResposta,
+            dataEnvio,
+        });
+
+        if (!resposta){
+            return res.status(500).send("erro ao criar resposta");
+        }
+       
+        return res.status(200).send(resposta);
+        
+    } catch (error) {
+        return res.status(400).send("error");
+    }
+    
+}
+
+async function createRespostaTopico(req, res) {
+
+    try {
+
+        const {idUsuario, idTopico, conteudoResposta} = req.body;
+        let nomeUsuario = "";
+
+        const topico = await Topico.findById(
+            idTopico
+        );
+
+        if (!topico){
+            return res.status(400).send("Topico nao encontrado");
+        }
+
+        const usuario = await Usuario.findById(idUsuario);
+
+        if (!usuario){
+            return res.status(400).send("Usuario nao encontrado");
+
+        }
+
+        nomeUsuario = usuario.nomeUsuario;
+
+        const dataEnvio = Date.now();
+
+        const resposta = await Resposta.create({
+            idUsuario,
+            nomeUsuario,
+            idTopico,
             conteudoResposta,
             dataEnvio,
         });
@@ -107,10 +176,9 @@ async function createResposta(req, res) {
         return res.status(200).send(resposta);
         
     } catch (error) {
-        console.log(error);
         return res.status(400).send("error");
     }
     
 }
 
-export default {createResposta, getRespostas};
+export default {createResposta, getRespostasTopico, getRespostas, createRespostaTopico};

@@ -11,6 +11,10 @@ const Schema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    nomeUsuario:{
+        type: String,
+        required: true,
+    },
     dataCriacao: {
         type: Date,
         required: true,

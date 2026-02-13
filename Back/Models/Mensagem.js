@@ -1,37 +1,19 @@
 import mongoose from "mongoose";
 
-const statusMensagem = {
-    "NF": "Nao Finalizada",
-    "R": "Respondida",
-    "NR": "Nao Respondida",
-}
-
-function getStatusMensagem(statusM){
-    let result;
-    switch(statusM){
-        case "NF": 
-            result = statusMensagem.NF;
-            break
-
-        case "R": 
-            result = statusMensagem.R;
-            break
-
-        case "NR": 
-            result = statusMensagem.NR;
-            break
-        default: 
-            result = "";
-            break;
-    }
-    return result;
-}
-
 const Schema = new mongoose.Schema({
     idUsuario: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Usuario',
         required: true,
+    },
+    idMensagem: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Mensagem',
+        required: false,
+    },
+    tituloMensagem: {
+        type: String,
+        required: false,
     },
     conteudoMensagem: {
         type: String,
@@ -39,7 +21,7 @@ const Schema = new mongoose.Schema({
     },
     statusMensagem: {
         type: String, 
-        required: true,
+        required: false,
     },
     dataEnvio: {
         type: Date,
@@ -52,6 +34,4 @@ const Schema = new mongoose.Schema({
 
 })
 
-const model = mongoose.model('Mensagem', Schema);
-
-export default {model, statusMensagem, getStatusMensagem}; 
+export default mongoose.model('Mensagem', Schema); 

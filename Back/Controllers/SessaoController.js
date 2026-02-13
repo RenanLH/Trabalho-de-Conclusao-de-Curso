@@ -8,30 +8,43 @@ async function createSessao(req, res) {
     try {
         const {email, senha} = req.body;
 
-        console.log(email, senha);
-
         const usuario = await Usuario
             .findOne({email});
 
-        if (!usuario || !await bcrypt.compare(senha, usuario.senha))
-            return res.status(404).send("Usuario nao encontrado");
+        if (!usuario)
+            return res.status(404).send("Email não cadastrado!");
         
+        if (!await bcrypt.compare(senha, usuario.senha))
+            return res.status(404).send("Senha Incorreta!");
 
         const idUsuario = usuario._id;
-        const token = crypto.randomBytes(16).toString('hex');
+        let token = crypto.randomBytes(16).toString('hex');
 
         const dataCriacao = new Date(Date.now());
     
         const dataExpiracao = new Date(dataCriacao);
         dataExpiracao.setDate(dataCriacao.getDate() + 7);
 
+        let role = "";
+
+
+        if (usuario.role && usuario.role == "admin")
+            role = "8354c67bf5dab839";
+        else 
+            role = "8ae76d76881f379c"    
+        
+        token = token + role;
+
+        const nomeUsuario = usuario.nomeUsuario;
+
         const createdSessao = await Sessao.create({
             idUsuario,
             token,
+            nomeUsuario,
             dataCriacao,
             dataExpiracao
         });
-
+        createSessao.role = role;
         console.log(createdSessao);
 
         return res.status(201).send(createdSessao); 
@@ -50,7 +63,7 @@ async function getSessao(req, res) {
 
         if (!sessao )
             return res.status(404).send("Sessao nao encontrada");
-
+            
         if(sessao.dataExpiracao < new Date()){
             await Sessao.deleteOne({token});
 

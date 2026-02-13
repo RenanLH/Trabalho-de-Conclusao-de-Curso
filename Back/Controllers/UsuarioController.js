@@ -12,7 +12,6 @@ async function hashPass(senha) {
         console.log(error);
         return null;
     }
-
 }
 
 const role = {
@@ -23,20 +22,26 @@ const role = {
 async function createUsuario(req, res) {
     try {
         const {email, senha, nomeUsuario} = req.body;
-        console.log(email, senha, nomeUsuario);
+
+        if (!email || !senha || !nomeUsuario 
+            || String(email).trim().length < 5 
+            || String(senha).trim().length < 5
+            || String(nomeUsuario).trim().length < 5)
+            
+            return res.status(400).send('Dados Inválidos');
 
         const usuarioExistente = await Usuario.findOne({
             email
         });
 
         if (usuarioExistente){
-            return res.status(400).send({message: 'Usuario ja esta cadastrado'});
+            return res.status(400).send('Email já esta cadastrado');
         }
 
         const hashedPass = await hashPass(senha);
 
         if (!hashedPass){
-            return res.status(500);
+            return res.status(500).send("Erro do servidor");
         }
 
         const createdUsuario = await Usuario.create({
@@ -47,7 +52,7 @@ async function createUsuario(req, res) {
         })
 
         if (!createdUsuario){
-            return res.status(400).send("Erro ao criar o usuario");
+            return res.status(401).send("Erro ao criar o usuario");
         }
 
         const idUsuario = createdUsuario._id;
@@ -65,12 +70,9 @@ async function createUsuario(req, res) {
             dataExpiracao
         });
 
-        console.log(createdSessao);
-
         return res.status(201).send(createdSessao);
 
     } catch (error) {
-        console.log(error);
         return res.status(400).send(error);
     }
     
@@ -80,18 +82,14 @@ async function getUsuario(req, res) {
     try {
         const {email, senha} = req.body;
 
-        console.log(email, senha);
-
         const usuario = await Usuario.findOne({email});
 
         if (!usuario|| !await bcrypt.compare(senha, usuario.senha))
             return res.status(404).send("senha incorreta");
 
-        console.log(usuario);
         return res.status(200).send(usuario);
 
     } catch (error) {
-        console.log(error);
         return res.status(400).send("error");
     }
 
@@ -108,7 +106,6 @@ try {
     return res.status(200).send(usuario);
 
 } catch (error) {
-    console.log(error);
     return res.status(400).send("error");
 }
 

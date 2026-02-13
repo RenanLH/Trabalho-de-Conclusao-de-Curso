@@ -1,4 +1,5 @@
 import Topico from "../Models/Topico.js";
+import Usuario from "../Models/Usuario.js";
 
 async function createTopico(req, res) {
     const {idUsuario, titulo, conteudo} = req.body;
@@ -15,7 +16,6 @@ async function createTopico(req, res) {
 
         return res.status(201).send(createdTopico);
     } catch (error) {
-        console.log(error);
         return res.status(400).send("error");
     }
  }
@@ -26,12 +26,19 @@ async function getTopico(req, res) {
         const idTopico = req.params.idTopico;
 
         const topicoDb = await Topico.findById(idTopico);
+        if (topicoDb){
+            const idUsuario = topicoDb.idUsuario;
+            const usuario = await Usuario.findById(idUsuario);
 
-        return res.status(200).send(topicoDb);  
+            if (usuario){
+                topicoDb.idUsuario = usuario.nomeUsuario;
+                return res.status(200).send(topicoDb);  
+            }
+        }
+        return res.status(400).json("Error");  
 
     } catch (error) {
-        console.log(error);
-        res.status(500).json(`error ${error}`);
+        res.status(400).json(`error ${error}`);
     }
 
 }
@@ -50,10 +57,9 @@ async function index(req, res) {
         return res.status(200).send(topicos);
         
     } catch (error) {
-        console.log(error);
         return res.status(400).send("error")
     }
     
 }
 
-export default {createTopico, getTopico};
+export default {createTopico, getTopico, index};

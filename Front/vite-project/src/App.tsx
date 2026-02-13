@@ -7,9 +7,10 @@ import Cadastro from "./pages/Cadastro";
 import PerguntasFrequentes from "./pages/PerguntasFrequentes";
 import Topico from "./pages/Topico";
 import Login from "./pages/Login";
-import Mensagens from "./pages/Mesagens";
-import Mensagem from "./pages/Mensagem";
+import Mensagens from "./pages/MesagemList";
+import MensagemPage from "./pages/Mensagem";
 import NovaMensagem from "./pages/NovaMensagem";
+import Forum_NovoTopico from "./pages/NovoTopico";
 
 function App() {
   return (
@@ -20,8 +21,9 @@ function App() {
           <Route path="*" element={<Home />} />
           <Route path="/duvidas" element={<PerguntasFrequentes />} />
           <Route path="/forum" element={<Forum />} />
+          <Route path="/forum/novo" element={<Forum_NovoTopico />} />
           <Route path="/mensagens" element={<Mensagens />} />
-          <Route path="/mensagem/:id" element={<Mensagem />} />
+          <Route path="/mensagem/:id" element={<MensagemPage />} />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/topico/:id" element={<Topico />} />
           <Route path="/login" element={<Login/>}/>

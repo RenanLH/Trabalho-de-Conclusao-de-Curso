@@ -11,9 +11,9 @@ const Schema = new mongoose.Schema({
         ref: 'Resposta',
         required: false,
     },
-    idMensagem: {
+    idTopico:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Mensagem',
+        ref: 'Topico',
         required: false,
     },
     nomeUsuario: {

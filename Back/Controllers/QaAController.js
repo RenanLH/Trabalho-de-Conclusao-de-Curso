@@ -10,8 +10,6 @@ async function createPergunta(req, res) {
             resposta,
         });
 
-        console.log(perguntaExiste);
-
         if (perguntaExiste){
             return res.status(400).send({message: 'Pergunta ja esta cadastrada'});
         }
@@ -24,7 +22,6 @@ async function createPergunta(req, res) {
         return res.status(201).send(createdPergunta);
 
     } catch (error) {
-        console.log(error);
         return res.status(400).send('error');
     }
     
@@ -33,6 +30,7 @@ async function createPergunta(req, res) {
 async function index(req, res) {
 
     try {
+
         const perguntasRespostas = await QaA.find();
 
         if (!perguntasRespostas || !perguntasRespostas.length ){
@@ -43,7 +41,6 @@ async function index(req, res) {
 
 
     } catch (error) {
-        console.log(error);
         return res.status(400).send('error');
     }
     

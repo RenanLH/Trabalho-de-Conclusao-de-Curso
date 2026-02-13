@@ -1,26 +1,18 @@
 import React from 'react';
 
 interface SelectLanguageProps {
-  language: string | null;
-  changeLanguage: (language: string) => void; 
-  className?: string;
+  changeLanguage: (language: string) => void;
 }
 
-const SelectLanguage: React.FC<SelectLanguageProps> = ({language, changeLanguage, className }) => {
+const SelectLanguage: React.FC<SelectLanguageProps> = ({ changeLanguage }) => {
 
-  const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedLanguage = event.target.value;
-    sessionStorage.setItem("language", selectedLanguage);
-    changeLanguage(selectedLanguage);  
-  };
+
 
   return (
-    <div>
-      <select className={`form-select ${className}`} value={language? language: "pt"} onChange={handleLanguageChange}>
-        <option value="pt">Português</option>
-        <option value="es">Espanhol</option>
-        <option value="en">Ingles</option>
-      </select>
+    <div className="flex gap-4 items-center notranslate">
+      <span className="flag-icon flag-icon-br" onClick={() => changeLanguage('pt')}></span>
+      <span className="flag-icon flag-icon-es" onClick={() => changeLanguage('es')}></span>
+      <span className="flag-icon flag-icon-us" onClick={() => changeLanguage('en')}></span>
     </div>
   );
 };

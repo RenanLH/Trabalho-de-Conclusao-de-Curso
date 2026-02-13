@@ -1,78 +1,53 @@
-import axios from "axios";
-import { FormEvent, useState } from "react";
-import { API_BASE_URL } from "../config";
+import { FormEvent } from "react";
+import CustomButton from "./CustomButton";
 
 type ResponderParams = {
-    idMensagem: string;
-    idUsuario: string;
-    idResposta: string|undefined;
-  };
+  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  textoBotao: string;
+  onChangeResposta: (respota: string) => void;
+  conteudoResposta: string;
+};
 
-const responder = (param:ResponderParams) =>{
+const responder = (param: ResponderParams) => {
 
-    let { idMensagem, idUsuario, idResposta } = param;
-    const [conteudoResposta, setConteudoResposta] = useState<string> ("");
+  let { textoBotao, onSubmit, onChangeResposta, conteudoResposta } = param;
 
-    async function onSubmit(e:FormEvent<HTMLFormElement>){
-        e.preventDefault();
-
-        let url = `${API_BASE_URL}/respostas/mensagem`;
-
-        if(idMensagem == "" || idUsuario == ""){
-            url = `${API_BASE_URL}/mensagens`;
-            idUsuario = sessionStorage.getItem("idUsuario") || "";
-            const token = sessionStorage.getItem("token") || "";
-            if(idUsuario == ""){
-                console.log("Usuário não autenticado");
-                return;
-            }
-
-            const resultCreate = await axios.post(url, {
-                idUsuario: idUsuario,
-                token: token,
-                conteudoMensagem: conteudoResposta
-            });
-
-            if(resultCreate.status == 201){
-                console.log("Mensagem criada com sucesso");
-                window.location.href = "/mensagens";
-            }
-            return;
-        
-        }
-
-        idUsuario = sessionStorage.getItem("idUsuario") || "";
-
-        const result = await axios.post(url, {
-            idMensagem: idMensagem,
-            idUsuario: idUsuario,
-            idResposta: idResposta,
-            conteudoResposta: conteudoResposta
-        });
-        if (result.status == 200){
-            console.log("Resposta enviada com sucesso");
-            //refresh page
-            window.location.reload();
-        }
-    }
-
-    return (
-        <div>
-            <div className="p-2 ml-6 mr-3 ">
-                <form action="submit" onSubmit={(e) => onSubmit(e)}>
-                    <div className="flex flex-col  ">
-                        <textarea className="h-32 border-2  border-blue-800 rounded" value={conteudoResposta} onChange={(e) => setConteudoResposta(e.target.value)} required />
-                    </div>
-                    <div className="flex justify-end">
-                        <button 
-                        disabled={conteudoResposta == ""} 
-                        className="mt-3 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                        type="submit">Enviar</button>
-                    </div>
-                </form>
-            </div>
+  return (
+    <div className="flex w-full p-2 ml-3">
+      <form
+        action="submit"
+        onSubmit={(e) => onSubmit(e)}
+        className="flex-1 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-md overflow-hidden"
+      >
+        <div className="flex flex-col p-4 bg-slate-50 dark:bg-slate-900">
+          <textarea className={`
+          min-h-28 w-full p-3 
+          text-slate-700 dark:text-slate-50 
+          bg-slate-50 dark:bg-slate-800 
+          border-2 border-slate-200 dark:border-slate-700 
+          rounded-lg transition-all duration-200 outline-none resize-y 
+          placeholder:text-slate-400 
+          hover:border-slate-300 dark:hover:border-slate-500
+          focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/20
+        `}
+            value={conteudoResposta}
+            onChange={(e) => onChangeResposta(e.target.value)}
+            placeholder="Escreva sua resposta..."
+            required
+          />
         </div>
-    );
+
+        <div className="px-4 py-3 bg-slate-50 border-t border-slate-100 dark:bg-slate-900  flex justify-end">
+          <div className="">
+            <CustomButton
+              disabledFunction={() => conteudoResposta?.length < 2}
+              buttonText={textoBotao}
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+  );
 };
 
 export default responder;
