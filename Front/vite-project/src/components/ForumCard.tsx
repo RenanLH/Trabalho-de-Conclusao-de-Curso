@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "../util/util";
 
 interface CardProps {
   id: string;
@@ -24,26 +25,24 @@ const ForumCard = ({ id, title, date, conteudo }: CardProps) => {
         hover:shadow-xl hover:border-blue-400 hover:bg-blue-50/30
         relative overflow-hidden
       dark:bg-slate-900 dark:text-slate-50 bg-slate-50  text-slate-900"
-      onClick={redirectPage}
-
-    >
+      onClick={redirectPage}>
 
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 min-w-0 w-full">
         <div className="flex items-center justify-between">
           <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-blue-700 border border-blue-200">
             {"Discussão"}
           </span>
           <span className="text-[11px] font-medium text-slate-500 dark:text-slate-900 bg-slate-100 dark:bg-slate-200 px-2 py-0.5 rounded">
-            {date}
+            {formatDate(date)}
           </span>
         </div>
 
-        <div>
-          <h3 className="text-lg font-bold text-slate-800 dark:text-slate-50 leading-tight  transition-colors line-clamp-2">
+        <div className="min-w-0 w-full">
+          <h3 className="text-lg font-bold text-slate-800 dark:text-slate-50 leading-tight transition-colors line-clamp-2 [overflow-wrap:anywhere] w-full">
             {title}
           </h3>
-          <p className="mt-2 text-sm text-slate-500 dark:text-slate-100 line-clamp-2 leading-relaxed font-normal">
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-100  leading-relaxed font-normal line-clamp-3 [overflow-wrap:anywhere] w-full">
             {conteudo}
           </p>
         </div>

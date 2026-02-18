@@ -13,7 +13,7 @@ const responder = (param: ResponderParams) => {
   let { textoBotao, onSubmit, onChangeResposta, conteudoResposta } = param;
 
   return (
-    <div className="flex w-full p-2 ml-3">
+    <div className="flex w-full p-2">
       <form
         action="submit"
         onSubmit={(e) => onSubmit(e)}

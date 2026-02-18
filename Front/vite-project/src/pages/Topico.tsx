@@ -6,10 +6,10 @@ import { useTranslation } from "react-i18next";
 import Header from "../components/Header";
 import { API_BASE_URL } from "../util/config";
 import Responder from "../components/Responder";
-import Notification from "../components/Notification";
 import { isLogged } from "../util/util";
 import UserBadge from "../components/UserBadge";
 import UserInfo from "../components/UserInfo";
+import CustomNotification from "../components/CustomNotification";
 
 type TopicParams = {
   id: string;
@@ -74,7 +74,7 @@ const Topic = () => {
       window.location.href = "/forum"
     }
 
-    const url = `${API_BASE_URL}/forum/` + id;
+    const url = `${API_BASE_URL}/topico/` + id;
     setRespostas([]);
 
     await axios.get(url).then((res) => {
@@ -129,11 +129,11 @@ const Topic = () => {
 
   return (
     <div className="bg-gray-100 dark:bg-slate-800/80 min-h-screen ">
-      <Header texto={topico?.titulo} translate={true} />
+      <Header texto={topico?.titulo || "Tópico"} translate={true} />
       {
         loaded && topico ?
           <div>
-            <Notification isOpen={notification} type={"error"} mensagem={"Por favor, faça login para continuar"} onCancel={() => setNotification(!notification)} onLogin={true} onConfirm={() => setNotification(!notification)} />
+            <CustomNotification isOpen={notification} type={"error"} mensagem={"Por favor, faça login para continuar"} onCancel={() => setNotification(!notification)} onLogin={true} onConfirm={() => setNotification(!notification)} />
 
             <div className="group mr-4 ml-4 mt-2 bg-slate-50 border dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm transition-all duration-300 overflow-hidden">
               <div className="flex">
@@ -155,7 +155,7 @@ const Topic = () => {
 
 
                   <div className="prose prose-slate max-w-none">
-                    <p className="text-slate-700 dark:text-slate-50 leading-relaxed text-base md:text-lg font-normal whitespace-pre-line">
+                    <p className="text-slate-700 dark:text-slate-50 leading-relaxed text-base md:text-lg font-normal whitespace-pre-line break-words">
                       {topico.conteudo}
                     </p>
                   </div>
@@ -171,7 +171,11 @@ const Topic = () => {
                 <Resposta id={item.id} idTopico={topico.id} nomeUsuario={item.user} conteudoMensagem={item.text} idResposta={""} nivel={1} dataCriacao={item.data} />
               ))
             }
-          </div> : <div></div>
+          </div> 
+          : loaded &&
+          <div>
+            <h1 className="p-4 text-slate-900 dark:text-white text-center text-4xl">Erro ao carregar o tópico.</h1>
+          </div>
       }
     </div>
   );

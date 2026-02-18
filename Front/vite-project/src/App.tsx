@@ -11,6 +11,7 @@ import Mensagens from "./pages/MesagemList";
 import MensagemPage from "./pages/Mensagem";
 import NovaMensagem from "./pages/NovaMensagem";
 import Forum_NovoTopico from "./pages/NovoTopico";
+import NovaSenha from "./pages/NovaSenha";
 
 function App() {
   return (
@@ -21,14 +22,16 @@ function App() {
           <Route path="*" element={<Home />} />
           <Route path="/duvidas" element={<PerguntasFrequentes />} />
           <Route path="/forum" element={<Forum />} />
+          <Route path="/forum/buscar" element={<Forum />} />
           <Route path="/forum/novo" element={<Forum_NovoTopico />} />
+          <Route path="/topico/:id" element={<Topico />} />
           <Route path="/mensagens" element={<Mensagens />} />
           <Route path="/mensagem/:id" element={<MensagemPage />} />
+          <Route path="/mensagem/nova" element={<NovaMensagem/>}/>
           <Route path="/cadastro" element={<Cadastro />} />
-          <Route path="/topico/:id" element={<Topico />} />
+          <Route path= "/esqueciSenha" element={<NovaSenha/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/home" element={<Home />} />
-          <Route path="/mensagem/nova" element={<NovaMensagem/>}/>
         </Routes>
       </div>
     </>

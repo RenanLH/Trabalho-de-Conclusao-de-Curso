@@ -1,5 +1,6 @@
 import { t } from "i18next";
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "../util/util";
 
 interface MensagemCardProps {
   id: string;
@@ -24,8 +25,7 @@ const MensagemCard = ({ id, title, userName, userId, date, conteudo }: MensagemC
       className="
         group cursor-pointer
         rounded-xl border border-slate-200 dark:border-slate-700
-        p-5
-        shadow-sm
+        p-5 shadow-sm
         transition-all duration-300
       hover:border-blue-400 hover:shadow-md hover:bg-slate-50/50
         relative overflow-hidden
@@ -39,27 +39,29 @@ const MensagemCard = ({ id, title, userName, userId, date, conteudo }: MensagemC
           <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-300">
             {(idUsuario && idUsuario != userId) ? "Mensagem Recebida" : "Mensagem Enviada"}
           </span>
+        
         </div>
+
         <span className="text-[11px] font-medium text-slate-400 dark:text-slate-900 bg-slate-100 dark:bg-slate-200 px-2 py-0.5 rounded notranslate">
-          {date}
+          {formatDate(date)}
         </span>
       </div>
 
       <div className="mb-2 flex gap-2 notranslate">
         <span className="text-xs text-slate-500 dark:text-slate-300 block mb-0.5">{t("Mensagem_Remetente")}:</span>
-        <h4 className="text-sm font-bold text-slate-800 dark:text-slate-50 ">
+        <h4 className="text-sm font-bold text-slate-800 dark:text-slate-50">
           {userName}
         </h4>
       </div>
 
-      <div className="pt-2 border-t border-slate-700 dark:border-slate-50">
+      <div className="pt-2 border-t border-slate-700 dark:border-slate-50 min-w-0 w-full">
         <span className="text-xs text-slate-500 dark:text-slate-300 block mb-0.5">Assunto:</span>
-        <h3 className="text-base font-semibold text-slate-900 dark:text-slate-50 leading-snug line-clamp-2">
+        <h3 className="text-base font-semibold text-slate-900 dark:text-slate-50 leading-snug line-clamp-2 [overflow-wrap:anywhere]">
           {title}
         </h3>
       </div>
 
-      <p className="mt-3 text-sm text-slate-500 dark:text-slate-300 line-clamp-2 font-normal leading-relaxed">
+      <p className="mt-3 text-sm text-slate-500 dark:text-slate-300 line-clamp-2 font-normal leading-relaxed break-words">
         {conteudo || "Clique para abrir a mensagem completa e visualizar os detalhes..."}
       </p>
 

@@ -16,7 +16,7 @@ async function createTopico(req, res) {
 
         return res.status(201).send(createdTopico);
     } catch (error) {
-        return res.status(400).send("error");
+        return res.status(500).send("erro do servidor")
     }
  }
 
@@ -38,7 +38,7 @@ async function getTopico(req, res) {
         return res.status(400).json("Error");  
 
     } catch (error) {
-        res.status(400).json(`error ${error}`);
+        return res.status(500).send("erro do servidor")
     }
 
 }
@@ -57,9 +57,38 @@ async function index(req, res) {
         return res.status(200).send(topicos);
         
     } catch (error) {
-        return res.status(400).send("error")
+        return res.status(500).send("erro do servidor")
     }
     
 }
 
-export default {createTopico, getTopico, index};
+
+
+async function search(req, res) {
+
+    const {page, limit, query} = req.params
+
+    try {
+        console.log(query);
+        let terms = query.split(" ");
+        terms = terms.filter((value, id) => (value.trim().length > 2));
+
+        const topicos = await Topico.find({
+            $or: terms.map(term => ({
+                titulo: new RegExp(term, "i")
+            }))
+        });
+
+        if (!topicos || !topicos.length){
+            return res.status(404).send("not found");
+        }
+
+        return res.status(200).send(topicos);
+        
+    } catch (error) {
+        return res.status(500).send("erro do servidor")
+    }
+    
+}
+
+export default {createTopico, getTopico, index, search};

@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { API_BASE_URL } from "../util/config";
 import axios from "axios";
 import ForumCard from "../components/ForumCard";
-import logo_mensagem from "../assets/message-circle-lines-svgrepo-com.svg";
 import { isAdmin } from "../util/util";
+import FloatingMenu from "../components/FloatingMenu";
+import { useParams, useSearchParams } from "react-router-dom";
 
 type TopicDB = {
   _id: string;
@@ -18,6 +19,9 @@ type TopicDB = {
 const Forum = () => {
   const { t, i18n } = useTranslation();
   const [topics, setTopics] = useState<TopicDB[]>([]);
+  const [loaded, setLoaded] = useState<boolean>(false);
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("q");
 
 
   useEffect(() => {
@@ -35,54 +39,58 @@ const Forum = () => {
 
   }, []);
 
-  function formatDate(date: string) {
-    const dataF = new Date(date);
-
-    const dia = dataF.getDate() < 10 ? "0" + dataF.getDate() : dataF.getDate();
-    const mes = dataF.getMonth() < 10 ? "0" + (dataF.getMonth() + 1) : (dataF.getMonth() + 1); // getMonth começa em 0 :)
-
-    return `${dia}/${mes}/${dataF.getFullYear()}`;
-  }
-
 
   function onClickTopico() {
     window.location.href = "/forum/novo";
   }
 
   async function getTopics() {
-    const url = `${API_BASE_URL}/forum`
-    setTopics([]);
+    let url = `${API_BASE_URL}/forum`
 
-    const result = await axios.get(url);
 
-    if (result.status == 200) {
-      setTopics(result.data as TopicDB[]);
+    if (query){
+      url = url + `/buscar/${query}`; 
     }
+
+    await axios.get(url).then((res) => {
+      if (res.status == 200) {
+        setTopics(res.data as TopicDB[]);
+      }
+
+      setLoaded(true);
+    }).catch((error) => {
+      setLoaded(true);
+    });
+
   }
 
   return (
     <div className="bg-gray-100 dark:bg-slate-800/80 min-h-screen">
-      <div>
-        <Header texto={t("Forum")} />
-      </div>
+      <Header texto={t("Forum")} />
 
-      <div className="flex flex-row">
-        <ul className="grid grid-flow-row sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4">
-          {topics.map((item, _index) => (
-            <li className="list-item p-4" key={item._id}>
-              <ForumCard id={item._id} title={item.titulo} conteudo={item.conteudo} date={formatDate(item.dataCriacao)} />
-            </li>
-          ))}
-        </ul>
-      </div>
+      {
+        loaded && topics.length ?
+          <div className="flex flex-row">
+            <ul className="grid grid-flow-row sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4">
+              {
+                topics.map((item, _index) => (
+                  <li className="list-item p-4" key={item._id}>
+                    <ForumCard id={item._id} title={item.titulo} conteudo={item.conteudo} date={item.dataCriacao} />
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+          :
+          loaded &&
+          <div>
+            <h1 className=" p-4 text-slate-900 dark:text-white text-center text-4xl">Nenhum tópico encontrado.</h1>
+          </div>
+      }
       {
         isAdmin() &&
-        <div className="fixed bottom-44 right-4">
-          <img className="size-20 cursor-pointer" src={logo_mensagem} alt="Nova Mensagem" onClick={onClickTopico} />
-        </div>
+        <FloatingMenu onAdd={onClickTopico} onEdit={() => { }} onDelete={() => { }} showAdd={isAdmin()} showEdit={isAdmin()} showDelete={isAdmin()} />
       }
-
-
     </div>
   );
 };

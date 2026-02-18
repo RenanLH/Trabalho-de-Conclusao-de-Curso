@@ -22,7 +22,7 @@ async function createPergunta(req, res) {
         return res.status(201).send(createdPergunta);
 
     } catch (error) {
-        return res.status(400).send('error');
+        return res.status(500).send("erro do servidor")
     }
     
 }
@@ -41,7 +41,7 @@ async function index(req, res) {
 
 
     } catch (error) {
-        return res.status(400).send('error');
+        return res.status(500).send("erro do servidor")
     }
     
 }

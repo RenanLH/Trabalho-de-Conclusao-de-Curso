@@ -6,9 +6,11 @@ import Header from "../components/Header";
 import { useTranslation } from "react-i18next";
 import { API_BASE_URL, BASE_URL } from "../util/config";
 import Mensagem from "../components/Mesagem";
-import { isLogged, statusMensagem } from "../util/util";
-import Notification from "../components/Notification";
+import { isAdmin, isLogged, statusMensagem } from "../util/util";
+import Notification from "../components/CustomNotification";
 import { io, Socket } from 'socket.io-client';
+import FloatingMenu from "../components/FloatingMenu";
+import { t } from "i18next";
 
 type MensagemParams = {
   id: string;
@@ -63,7 +65,6 @@ const MensagemPage = () => {
     socket.emit('join', id);
 
     socket.on('nova_mensagem', (data) => {
-      console.log("NOVA MENSASAGEMME " + data);
       setRespostas((prev) => [...prev, {
         _id: data._id, idUsuario: data.idUsuario,
         conteudoMensagem: data.conteudoMensagem, tituloMensagem: "", nomeUsuario: data.nomeUsuario,
@@ -152,10 +153,16 @@ const MensagemPage = () => {
   return (
     <div className="bg-gray-100 dark:bg-slate-800/80 min-h-screen">
 
-      <Header texto={mensagem.tituloMensagem} translate={true} />
+      <Header texto={mensagem.tituloMensagem || t("Mensagem")} translate={true} />
       {loaded ?
 
         <div className="flex flex-col">
+
+          {
+          isAdmin() && 
+            <FloatingMenu onAdd={() =>{}} onEdit={() =>{}} onDelete={() =>{}} showAdd={isLogged()} showEdit={isAdmin()} showDelete={isAdmin()}/>
+          }
+
           <Mensagem user={mensagem.nomeUsuario} status={mensagem.statusMensagem} text={mensagem.conteudoMensagem} date={mensagem.dataEnvio} />
           {respostas.map((item, _index) => (
             <Mensagem user={item.nomeUsuario} status={item.statusMensagem} text={item.conteudoMensagem} date={item.dataEnvio} />
@@ -171,8 +178,7 @@ const MensagemPage = () => {
         </div>
         :
         <div>
-          <h1 className="text-center text-4xl">Erro ao carregar mensagem</h1>
-
+          <h1 className="p-4 text-slate-900 dark:text-white text-center text-4xl ">Erro ao carregar a mensagem.</h1>
         </div>
       }
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Moon, LogOut, Settings } from 'lucide-react';
 import logo_login from "../assets/user-circle-svgrepo-com.svg"
 import { useTranslation } from 'react-i18next';
+import UserBadge from './UserBadge';
 
 
 
@@ -32,9 +33,9 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout, onNavigate, toggleTheme, 
         className="flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors group hover:bg-slate-200 dark:hover:bg-slate-800">
 
         <div className="relative">
-          <div className="w-8 h-8  rounded-full flex items-center justify-center overflow-hidden">
-            <img className="h-8 md:h-10 dark:invert" src={logo_login} alt="Logout" />
-          </div>
+
+          <UserBadge user={nomeUsuario}/>
+         
         </div>
         <div className="flex flex-col">
           <span className="text-sm font-medium">{t("Conta")}</span>
@@ -65,7 +66,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout, onNavigate, toggleTheme, 
           <div className="flex items-center gap-3 ">
             <span className="text-black dark:text-white">{<Settings size={20} color={isDarkMode ? "white" : "black"} />}</span>
             <div className="flex flex-col">
-              <span className="text-sm">{t("Settings")}</span>
+              <span className="text-sm">{t("Configuracoes")}</span>
             </div>
           </div>
         </button>

@@ -2,34 +2,6 @@ import Resposta from "../Models/Resposta.js";
 import Topico from "../Models/Topico.js";
 import Usuario from "../Models/Usuario.js";
 
-async function sortRespostas(respostaArray) {
-
-    try {
-        let sortedArray = [];
-
-        let currentID = respostaArray.find((resposta) => resposta.idResposta == null || resposta.idResposta == undefined);
-    
-        while(sortedArray.length < respostaArray.length){
-
-            sortedArray.push(currentID);
-
-            let nextID = respostaArray.find((resposta) => resposta.idResposta == currentID._id);
-
-            if (nextID){
-                currentID = nextID;
-            }   
-             
-        }
-
-        return sortedArray;
-    } catch (error) {
-        console.log(error);
-        return [];
-    }
-  
-    
-}
-
 async function getRespostas(req, res) {
     try {
         const {idResposta} = req.params;
@@ -55,7 +27,7 @@ async function getRespostas(req, res) {
         return res.status(200).send(respostas);
 
     } catch (error) {
-        return res.status(400).send("error");
+        return res.status(500).send("erro do servidor")
     }
     
 }
@@ -86,7 +58,7 @@ async function getRespostasTopico(req, res) {
         return res.status(200).send(respostas);
 
     } catch (error) {
-        return res.status(400).send("error");
+        return res.status(500).send("erro do servidor")
     }
     
 }
@@ -129,7 +101,7 @@ async function createResposta(req, res) {
         return res.status(200).send(resposta);
         
     } catch (error) {
-        return res.status(400).send("error");
+        return res.status(500).send("erro do servidor")
     }
     
 }
@@ -176,7 +148,7 @@ async function createRespostaTopico(req, res) {
         return res.status(200).send(resposta);
         
     } catch (error) {
-        return res.status(400).send("error");
+        return res.status(500).send("erro do servidor")
     }
     
 }

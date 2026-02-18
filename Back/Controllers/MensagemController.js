@@ -3,14 +3,14 @@ import Sessao from "../Models/Sessao.js";
 import Usuario from "../Models/Usuario.js";
 
 const status = {
-    F: "Finalizada",
-    R: "Respondida",
-    NR: "Nao Respondida",
+  F: "Finalizada",
+  R: "Respondida",
+  NR: "Nao Respondida",
 }
 
 const role = {
-    ADMIN:'admin',
-    USER:'user',
+  ADMIN: 'admin',
+  USER: 'user',
 }
 
 
@@ -59,8 +59,7 @@ async function createMensagem(req, res) {
     return res.status(201).send(createdMensagem);
 
   } catch (error) {
-    console.log(error);
-    return res.status(400).send(error);
+      return res.status(500).send("erro do servidor")
   }
 
 }
@@ -82,7 +81,7 @@ async function awnserMensagem(req, res) {
     const mensagem = await Mensagem.findById(idMensagem);
 
     if (usuario.role != role.ADMIN && mensagem.idUsuario.toString() != usuario._id.toString()) {
-      return res.status(403).send("Forbidden Not admin");
+      return res.status(403).send("Forbidden");
     }
 
     const nomeUsuario = usuario.nomeUsuario;
@@ -101,15 +100,13 @@ async function awnserMensagem(req, res) {
     }
 
     novaMensagem.statusMensagem = usuario.role;
-    console.log(novaMensagem);
 
     req.io.to(idMensagem).emit('nova_mensagem', novaMensagem);
 
     return res.status(201).send(novaMensagem);
 
   } catch (error) {
-    console.log(error);
-    return res.status(400).send(error);
+        return res.status(500).send("erro do servidor")
   }
 
 }
@@ -171,8 +168,7 @@ async function getMensagemUsuario(req, res) {
     return res.status(200).send(mensagens);
 
   } catch (error) {
-    console.log(error);
-    return res.status(400).send("error");
+        return res.status(500).send("erro do servidor")
   }
 
 }
@@ -215,7 +211,7 @@ async function getMensagemId(req, res) {
     return res.status(200).send(mensagem);
 
   } catch (error) {
-    return res.status(400).send("error");
+        return res.status(500).send("erro do servidor")
   }
 
 }
@@ -269,7 +265,7 @@ async function getRespostasId(req, res) {
     return res.status(200).send(mensagens);
 
   } catch (error) {
-    return res.status(400).send("error");
+        return res.status(500).send("erro do servidor")
   }
 
 }
@@ -277,8 +273,6 @@ async function getRespostasId(req, res) {
 async function getIndex(req, res) {
   try {
     let { statusMensagem } = req.params;
-
-    console.log(statusMensagem);
 
     const mensagens = await Mensagem.find({
       statusMensagem,
@@ -303,13 +297,12 @@ async function getIndex(req, res) {
     return res.status(200).send(mensagens);
 
   } catch (error) {
-    console.log(error);
-    return res.status(400).send("error");
+        return res.status(500).send("erro do servidor")
   }
 
 }
 
-async function finishMensagem(req, res){
+async function finishMensagem(req, res) {
 
   try {
 
@@ -324,14 +317,15 @@ async function finishMensagem(req, res){
       return res.status(404).send("Usuario não encontrado");
 
     let usuario = await Usuario.findById(idUsuario);
-    
+
     if (usuario.role != role.ADMIN) {
-      return res.status(403).send("Forbidden Not admin");
+      return res.status(403).send("Forbidden");
     }
 
-    
+
   } catch (error) {
-    
+    return res.status(500).send("erro do servidor")
+
   }
 
 

@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import Header from "../components/Header";
 import { FormEvent, useEffect, useState } from "react";
 import { API_BASE_URL } from "../util/config";
-import Notification from "../components/Notification";
+import Notification from "../components/CustomNotification";
 import axios from "axios";
 import { isLogged } from "../util/util";
 import i18n from "../i18n";
@@ -37,7 +37,7 @@ const NovaMensagem = () => {
   }, []);
 
   const disableButton = () => {
-    return mensagem.trim().length < 10 || titulo.trim().length < 15 || titulo.trim().length > 100;
+    return mensagem.trim().length < 10 || titulo.trim().length < minLength || titulo.trim().length > maxLength;
   }
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();

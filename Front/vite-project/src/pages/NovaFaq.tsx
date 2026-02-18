@@ -1,37 +1,37 @@
 import React, { useState, FormEvent } from 'react';
 import { API_BASE_URL } from '../util/config';
 import axios from 'axios';
-import CustomButton from './CustomButton';
+import CustomButton from '../components/CustomButton';
 
 interface FaqProps {
   showComponent: (value: boolean) => void;
-
+  showError: () => void;
 }
 
-const CriarNovaFaq: React.FC<FaqProps> = ({ showComponent }) => {
+
+const NovaFaq: React.FC<FaqProps> = ({ showComponent, showError }) => {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+
+  const disableButtom = () =>{
+    return question.trim().length < 5 || answer.trim().length < 5;
+  }
 
   async function postQuestion(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const url = `${API_BASE_URL}/duvidas`;
 
-    const result = await axios.post(url, {
+    await axios.post(url, {
       "pergunta": question,
       "resposta": answer
+    }).then((res)=>{
+      if (res.status == 201){
+        window.location.reload();
+      }
+    }).catch((error)=>{
+      showError();
     });
-
-    if (result.status == 201) {
-      console.log(result.data);
-
-      console.log("Pergunta cadastrada com sucesso");
-
-      window.location.href = "/duvidas"
-
-    } else {
-      console.log("Erro ao efetuar cadastro");
-    }
 
     setQuestion('');
     setAnswer('');
@@ -94,12 +94,12 @@ const CriarNovaFaq: React.FC<FaqProps> = ({ showComponent }) => {
               className={`
                 flex items-center gap-2 px-6 py-3 mb-4 text-sm font-bold text-white rounded-lg shadow-md notranslate
                 transition-all duration-200 transform active:scale-95
-                bg-slate-500 mt-4 hover:bg-slate-700 hover:shadow-slate-200/50 focus:ring-2 focus:ring-offset-2 focus:ring-slate-500'   
+                bg-slate-500 mt-4 hover:bg-slate-700  focus:ring-2 focus:ring-offset-2 focus:ring-slate-500'   
               `}            >
               {("Cancelar")}
             </button>
             <CustomButton
-              disabledFunction={() => false}
+              disabledFunction={disableButtom}
               buttonText="Publicar FAQ"
             />
           </div>
@@ -109,4 +109,4 @@ const CriarNovaFaq: React.FC<FaqProps> = ({ showComponent }) => {
   );
 };
 
-export default CriarNovaFaq;
+export default NovaFaq;

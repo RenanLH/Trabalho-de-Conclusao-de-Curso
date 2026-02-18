@@ -8,7 +8,7 @@ import Header from "../components/Header";
 import { useTranslation } from "react-i18next";
 import { API_BASE_URL } from "../util/config";
 import CustomButton from "../components/CustomButton";
-import Notification from "../components/Notification";
+import Notification from "../components/CustomNotification";
 
 library.add(fab, faEyeSlash, faEye);
 
@@ -135,7 +135,7 @@ const Login = () => {
                 </button>
 
               </div>
-              <a href="#" className="text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors">
+              <a href="/esqueciSenha" className="text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors">
                 {t("Esqueceu a senha?")}
               </a>
             </div>

@@ -20,7 +20,7 @@ const Mensagem = ({ user, text, date, status }: MensagemProps) => {
             <UserBadge user={user} />
             <UserInfo user={user} isAdmin={status == role.ADMIN} date={date}/>
           </div>
-            <span className="text-slate-700 dark:text-slate-50 leading-relaxed text-base md:text-lg font-normal whitespace-pre-line">{text}</span>
+            <span className="text-slate-700 dark:text-slate-50 leading-relaxed text-base md:text-lg font-normal whitespace-pre-line break-before-auto">{text}</span>
         </div>
       </div>
     </div>

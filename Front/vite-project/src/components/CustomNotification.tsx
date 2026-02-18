@@ -10,14 +10,10 @@ interface ModalProps {
   onLogin?: boolean;
 }
 
-const Notification: React.FC<ModalProps> = ({
-  isOpen,
-  type,
-  titulo,
-  mensagem,
-  onConfirm,
-  onCancel,
-  onLogin
+const CustomNotification: React.FC<ModalProps> = ({
+  isOpen, type, onLogin,
+  titulo, mensagem,
+  onConfirm, onCancel 
 }) => {
   if (!isOpen) return null;
 
@@ -60,8 +56,7 @@ const Notification: React.FC<ModalProps> = ({
             {onLogin && (
               <button
                 onClick={() => { window.location.href = "/login"; }}
-                className="flex-1 py-2 text-xs font-bold text-blue-600 dark:text-slate-50 hover:bg-blue-50 dark:hover:bg-slate-700 rounded-lg transition-all border border-transparent hover:border-blue-100"
-              >
+                className="flex-1 py-2 text-xs font-bold text-blue-600 dark:text-slate-50 hover:bg-blue-50 dark:hover:bg-slate-700 rounded-lg transition-all border border-transparent hover:border-blue-100">
                 Ir para Login
               </button>
             )}
@@ -83,4 +78,4 @@ const Notification: React.FC<ModalProps> = ({
   );
 };
 
-export default Notification;
+export default CustomNotification;

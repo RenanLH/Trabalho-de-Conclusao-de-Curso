@@ -5,7 +5,7 @@ import { API_BASE_URL } from "../util/config";
 import axios from "axios";
 import CustomButton from "../components/CustomButton";
 import { isAdmin, isLogged } from "../util/util";
-import Notification from "../components/Notification";
+import Notification from "../components/CustomNotification";
 
 const NovoTopico = () => {
 

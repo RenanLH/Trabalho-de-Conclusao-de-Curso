@@ -2,22 +2,21 @@ import { useEffect, useState } from "react";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { fab } from "@fortawesome/free-brands-svg-icons";
-import { faEye, faEyeSlash, faUser, faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 import axios from "axios";
 import Header from "../components/Header";
 import { useTranslation } from "react-i18next";
 import { API_BASE_URL } from "../util/config";
 import CustomButton from "../components/CustomButton";
-import CustomNotification from "../components/CustomNotification";
+import Notification from "../components/CustomNotification";
 
 library.add(fab, faEyeSlash, faEye);
 
-const Cadastro = () => {
+const NovaSenha = () => {
   const { t, i18n } = useTranslation();
   const [showPass, setShowPass] = useState(false);
   const [showPassConfirm, setShowPassConfirm] = useState(false);
 
-  const [nomeUsuario, setNomeUsuario] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
   const [confirmarSenha, setConfirmarSenha] = useState<string>("");
@@ -59,7 +58,7 @@ const Cadastro = () => {
   }
 
   const disableButton = () => {
-    return !validateEmail(email) || nomeUsuario.length < 5 || !validatePass(senha, confirmarSenha);
+    return !validateEmail(email) || !validatePass(senha, confirmarSenha);
   }
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -69,7 +68,6 @@ const Cadastro = () => {
     try {
 
       await axios.post(url, {
-        nomeUsuario,
         email,
         senha,
       }).then((res) => {
@@ -110,7 +108,7 @@ const Cadastro = () => {
     <div className=" bg-gray-100 dark:bg-slate-800/80 min-h-screen ">
 
       <div className="w-full">
-        <Header texto={t("Cadastro")} />
+        <Header texto={t("Nova Senha")} />
       </div>
 
       <div className="flex flex-col items-center justify-center">
@@ -119,25 +117,7 @@ const Cadastro = () => {
 
         <div className=" w-full max-w-xl dark:bg-slate-900 dark:text-slate-50 bg-slate-50 text-slate-900 rounded-2xl shadow-xl  p-8 ">
 
-          <form action="" onSubmit={(e) => onSubmit(e)} className="space-y-5">
-
-            <div className="relative group ">
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider ml-1 mb-1 block">
-                {t("Nome Completo")}
-              </label>
-              <div className="relative">
-                <div
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors">
-                  <FontAwesomeIcon icon={faUser} />
-                </div>
-                <input
-                  className="w-full pl-10 pr-4 py-3 text-slate-700 dark:text-slate-50 bg-slate-50 dark:bg-slate-800 border-transparent border-2 rounded-xl placeholder:text-slate-400"
-                  type="text" placeholder="Seu nome" onChange={(e) => setNomeUsuario(e.target.value)}
-                  value={nomeUsuario}
-                  required
-                />
-              </div>
-            </div>
+          <form action="" onSubmit={(e) => {}} className="space-y-5">
 
             <div className="relative group">
               <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider ml-1 mb-1 block">
@@ -203,14 +183,14 @@ const Cadastro = () => {
             </div>
 
             <div className="pt-4 flex justify-center">
-              <CustomButton disabledFunction={disableButton} buttonText="Criar Conta" />
+              <CustomButton disabledFunction={disableButton} buttonText="Atualizar Senha" />
             </div>
 
             <p className="text-center text-sm text-slate-500 pt-4">
               Já tem uma conta? <a href="/login" className="text-blue-600 font-bold hover:underline">{t("Login")}</a>
             </p>
 
-            <CustomNotification isOpen={notification} type={notifType} mensagem={error} onCancel={onCancel} onLogin={false} onConfirm={onConfirm} />
+            <Notification isOpen={notification} type={notifType} mensagem={error} onCancel={onCancel} onLogin={false} onConfirm={onConfirm} />
 
           </form>
         </div>
@@ -222,4 +202,4 @@ const Cadastro = () => {
   );
 };
 
-export default Cadastro;
+export default NovaSenha;

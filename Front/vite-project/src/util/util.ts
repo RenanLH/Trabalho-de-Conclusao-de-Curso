@@ -1,4 +1,7 @@
 const formatDate = (date: string) => {
+
+    console.log(date + "AAAAAAAAA");
+
     const dataF = new Date(date);
 
     const dia = dataF.getDate() < 10 ? "0" + dataF.getDate() : dataF.getDate();
@@ -6,18 +9,15 @@ const formatDate = (date: string) => {
 
 
     const language = sessionStorage.getItem("language");
+    let returnDate = `${dia}/${mes}/${dataF.getFullYear()}`;
 
-    if (language) {
-        let returnDate = `${dia}/${mes}/${dataF.getFullYear()}`;
-
-        if (language === "en") {
-            returnDate = `${mes}/${dia}/${dataF.getFullYear()}`;
-        }
-
-        return returnDate;
+    if (language && language === "en") {
+        returnDate = `${mes}/${dia}/${dataF.getFullYear()}`;
     }
 
-    return `${dia}/${mes}/${dataF.getFullYear()}`;
+    console.log(returnDate);
+
+    return returnDate;
 }
 
 const isLogged = () => {

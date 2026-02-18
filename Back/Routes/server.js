@@ -18,7 +18,8 @@ routes.get('/api/sessao/', SessaoController.getSessao);
 routes.post('/api/duvidas', QaAController.createPergunta);
 routes.get('/api/duvidas', QaAController.index);
 
-routes.get('/api/forum/:idTopico', TopicoController.getTopico);
+routes.get('/api/topico/:idTopico', TopicoController.getTopico);
+routes.get('/api/forum/buscar/:query', TopicoController.search);
 routes.post('/api/forum', TopicoController.createTopico);
 routes.get('/api/forum', TopicoController.index);
 

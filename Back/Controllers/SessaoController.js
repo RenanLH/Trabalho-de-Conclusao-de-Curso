@@ -45,13 +45,11 @@ async function createSessao(req, res) {
             dataExpiracao
         });
         createSessao.role = role;
-        console.log(createdSessao);
 
         return res.status(201).send(createdSessao); 
 
     } catch (error) {
-        console.log(error);
-        return res.status(400).send("error");
+        return res.status(500).send("erro do servidor")
     }
 }
 
@@ -73,7 +71,7 @@ async function getSessao(req, res) {
         return res.status(200).send(sessao);
 
     }catch (error) {
-        return res.status(400).send("error");
+        return res.status(500).send("erro do servidor")
     }
     
 }

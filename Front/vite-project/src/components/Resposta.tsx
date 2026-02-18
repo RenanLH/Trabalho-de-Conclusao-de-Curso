@@ -74,8 +74,6 @@ const Resposta = ({ id, idTopico, dataCriacao, conteudoMensagem, nomeUsuario, ni
         nomeUsuario: respostaBd.nomeUsuario,
         conteudoResposta: respostaBd.conteudoResposta,
         dataEnvio: respostaBd.dataEnvio
-
-
       }])
     }
 
@@ -105,7 +103,7 @@ const Resposta = ({ id, idTopico, dataCriacao, conteudoMensagem, nomeUsuario, ni
           idTopico: item.idTopico,
           nomeUsuario: item.nomeUsuario,
           conteudoResposta: item.conteudoResposta,
-          dataEnvio: formatDate(item.dataEnvio)
+          dataEnvio: item.dataEnvio
         }]);
       })
     }
@@ -113,7 +111,7 @@ const Resposta = ({ id, idTopico, dataCriacao, conteudoMensagem, nomeUsuario, ni
 
 
   return (
-    <div className={`group/${id} flex mr-5 ml-5 mt-2 border border-slate-200  
+    <div className={`group/${id} flex mr-3 ml-3 mt-2 border border-slate-200  
       rounded-xl shadow-sm hover:shadow-md hover:border-blue-200 transition-all duration-200 overflow-hidden
     `}>
 
@@ -127,7 +125,7 @@ const Resposta = ({ id, idTopico, dataCriacao, conteudoMensagem, nomeUsuario, ni
         </div>
 
 
-        <span className="text-slate-600 dark:text-slate-50 leading-relaxed text-sm md:text-base line-clamp-3 mb-4">
+        <span className="text-slate-600 dark:text-slate-50 leading-relaxed text-sm md:text-base line-clamp-10 mb-4 break-words ">
           {conteudoMensagem}
         </span>
 
@@ -142,8 +140,7 @@ const Resposta = ({ id, idTopico, dataCriacao, conteudoMensagem, nomeUsuario, ni
             flex transition-all duration-300 ease-in-out
             ${responder
             ? "opacity-100 translate-y-0 max-h-96 mt-3"
-            : "opacity-0 -translate-y-2 max-h-0 overflow-hidden pointer-events-none"
-          }
+            : "opacity-0 -translate-y-2 max-h-0 overflow-hidden pointer-events-none"}
           `}>
           <Responder conteudoResposta={conteudoResposta} onChangeResposta={setConteudoResposta} onSubmit={onSubmit} textoBotao={"Comentar"} />
         </div>
@@ -160,8 +157,7 @@ const Resposta = ({ id, idTopico, dataCriacao, conteudoMensagem, nomeUsuario, ni
                   <div className="mt-4 mb-4  w-full ">
                     <Resposta id={item._id} idTopico={idTopico} nomeUsuario={item.nomeUsuario}
                       conteudoMensagem={item.conteudoResposta} idResposta={item._id}
-                      nivel={nivel + 1} dataCriacao={formatDate(item.dataEnvio)}
-                    />
+                      nivel={nivel + 1} dataCriacao={item.dataEnvio} />
                   </div>
                 ))
               }

@@ -4,9 +4,10 @@ import { useTranslation } from "react-i18next";
 
 import Header from "../components/Header";
 import MensagemCard from "../components/MensagemCard";
-import logo_mensagem from "../assets/message-circle-lines-svgrepo-com.svg";
 import { API_BASE_URL } from "../util/config";
-import { formatDate, isLogged } from "../util/util";
+import { isAdmin, isLogged } from "../util/util";
+import FloatingMenu from "../components/FloatingMenu";
+import { MessageCircleMore, MessageCirclePlus } from "lucide-react";
 
 type MensagemType = {
   _id: string,
@@ -73,32 +74,29 @@ const Mensagens = () => {
       <Header texto={t("Minhas Mensagens")} />
 
       {loaded && mensagens.length ?
-        <div>
-          <ul className="grid grid-flow-row sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4">
-            {mensagens.map((item, _index) => (
-              <li className="list-item p-4" key={item._id}>
-                <MensagemCard id={item._id} title={item.tituloMensagem} conteudo={item.conteudoMensagem} userId={item.idUsuario} userName={item.nomeUsuario} date={formatDate(item.dataEnvio)} />
-              </li>
-            ))}
+        <div className="flex flex-row">
+          <ul className="grid w-full sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4">            {mensagens.map((item, _index) => (
+            <li className="list-item container mx-auto p-4" key={item._id}>
+              <MensagemCard id={item._id} title={item.tituloMensagem} conteudo={item.conteudoMensagem} userId={item.idUsuario} userName={item.nomeUsuario} date={item.dataEnvio} />
+            </li>
+          ))}
 
           </ul>
         </div>
         :
         <div>
           {loaded &&
-            <div className=" inset-0 z-[100] flex items-center justify-center p-4  dark:text-white">
-              <h1 className="text-center text-4xl">{t("NenhumaMensagem")}</h1>
+            <div >
+              <h1 className="p-4 text-slate-900 dark:text-white text-center text-4xl">{t("NenhumaMensagem")}</h1>
             </div>}
 
         </div>
-
       }
-
       {
         isLogged() &&
-        <div className="fixed bottom-44 right-4">
-          <img className="size-20 cursor-pointer" src={logo_mensagem} alt="Nova Mensagem" onClick={onClickMensagem} />
-        </div>
+        <FloatingMenu mainIcon={MessageCircleMore} addIcon={MessageCirclePlus}
+          onAdd={onClickMensagem} onEdit={() => { }} onDelete={() => { }}
+          showAdd={isLogged()} showEdit={isAdmin()} showDelete={isAdmin()} />
       }
 
     </div>
