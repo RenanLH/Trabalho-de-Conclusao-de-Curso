@@ -3,7 +3,6 @@ import Responder from "./Responder";
 import { API_BASE_URL } from "../util/config";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
-import { formatDate } from "../util/util";
 import UserBadge from "./UserBadge";
 import UserInfo from "./UserInfo";
 
@@ -44,8 +43,8 @@ const Resposta = ({ id, idTopico, dataCriacao, conteudoMensagem, nomeUsuario, ni
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const token = sessionStorage.getItem("token") || "";
-    let idUsuario = sessionStorage.getItem("idUsuario") || "";
+    const token = localStorage.getItem("token") || "";
+    let idUsuario = localStorage.getItem("idUsuario") || "";
 
     if (!token) {
       window.location.href = "/login";

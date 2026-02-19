@@ -21,12 +21,12 @@ const Login = () => {
   const [error, setError] = useState<string>("")
 
   useEffect(() => {
-    let theme = sessionStorage.getItem("theme");
+    let theme = localStorage.getItem("theme");
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
     }
 
-    let language = sessionStorage.getItem("language");
+    let language = localStorage.getItem("language");
     if (language) {
       i18n.changeLanguage(language);
     }
@@ -55,9 +55,9 @@ const Login = () => {
     }).then((res) => {
       if (res.status == 201) {
 
-        sessionStorage.setItem("token", res.data.token);
-        sessionStorage.setItem("idUsuario", res.data.idUsuario);
-        sessionStorage.setItem("nomeUsuario", res.data.nomeUsuario);
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("idUsuario", res.data.idUsuario);
+        localStorage.setItem("nomeUsuario", res.data.nomeUsuario);
 
         window.location.href = "/home";
       } else {
@@ -80,16 +80,15 @@ const Login = () => {
     <div className="bg-gray-100 dark:bg-slate-800/80 min-h-screen">
       <Header texto={t("Login")} />
 
-      <div className="  flex flex-col items-center justify-center p-4">
+      <div className=" flex flex-col items-center justify-center p-4">
         <div className="mb-2 flex flex-col items-center">
           <p className="text-slate-500 text-sm mt-1">
             {t("Acesse_Conta")}
           </p>
         </div>
 
-        <div
-          className="w-full max-w-xl  dark:bg-slate-900 dark:text-slate-50 bg-slate-50 text-slate-900 rounded-2xl p-8 border border-slate-100 dark:border-slate-700">
-          <form action="" onSubmit={(e) => onSubmit(e)} className="space-y-6">
+        <div className="w-full max-w-xl  dark:bg-slate-900 dark:text-slate-50 bg-slate-50 text-slate-900 rounded-2xl p-8 border border-slate-100 dark:border-slate-700">
+          <form onSubmit={(e) => onSubmit(e)} className="space-y-6">
 
             <div className="group">
               <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider ml-1 mb-2 block">

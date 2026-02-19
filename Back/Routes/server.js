@@ -16,6 +16,8 @@ routes.post('/api/sessao/', SessaoController.createSessao);
 routes.get('/api/sessao/', SessaoController.getSessao);
 
 routes.post('/api/duvidas', QaAController.createPergunta);
+routes.post('/api/duvidas/update', QaAController.updatePergunta);
+routes.post('/api/duvidas/delete', QaAController.deletePergunta);
 routes.get('/api/duvidas', QaAController.index);
 
 routes.get('/api/topico/:idTopico', TopicoController.getTopico);

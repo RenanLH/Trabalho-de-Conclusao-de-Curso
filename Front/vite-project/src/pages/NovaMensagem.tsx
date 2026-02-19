@@ -24,12 +24,12 @@ const NovaMensagem = () => {
 
   useEffect(() => {
 
-    let theme = sessionStorage.getItem("theme");
+    let theme = localStorage.getItem("theme");
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
     }
 
-    let language = sessionStorage.getItem("language");
+    let language = localStorage.getItem("language");
     if (language) {
       i18n.changeLanguage(language);
     }
@@ -45,8 +45,8 @@ const NovaMensagem = () => {
     if (titulo.trim().length > minLength && titulo.trim().length < maxLength) {
       let url = `${API_BASE_URL}/mensagens`;
 
-      const idUsuario = sessionStorage.getItem("idUsuario")
-      const token = sessionStorage.getItem("token");
+      const idUsuario = localStorage.getItem("idUsuario")
+      const token = localStorage.getItem("token");
       if (!isLogged()) {
         setNotification(true);
         return;

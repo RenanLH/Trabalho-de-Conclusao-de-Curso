@@ -1,14 +1,11 @@
 const formatDate = (date: string) => {
 
-    console.log(date + "AAAAAAAAA");
-
     const dataF = new Date(date);
 
     const dia = dataF.getDate() < 10 ? "0" + dataF.getDate() : dataF.getDate();
     const mes = dataF.getMonth() < 10 ? "0" + (dataF.getMonth() + 1) : (dataF.getMonth() + 1); // getMonth começa em 0 :)
 
-
-    const language = sessionStorage.getItem("language");
+    const language = localStorage.getItem("language");
     let returnDate = `${dia}/${mes}/${dataF.getFullYear()}`;
 
     if (language && language === "en") {
@@ -21,8 +18,8 @@ const formatDate = (date: string) => {
 }
 
 const isLogged = () => {
-    const token = sessionStorage.getItem("token");
-    const idUsuario = sessionStorage.getItem("idUsuario");
+    const token = localStorage.getItem("token");
+    const idUsuario = localStorage.getItem("idUsuario");
     const validToken = token ? (token.length >= 16) && validHex(token) : false;
     const validId = idUsuario ? (idUsuario.length >= 16) && validHex(idUsuario) : false
 
@@ -32,7 +29,7 @@ const isLogged = () => {
 
 const isAdmin = () => {
 
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
     return token != null && isLogged() && token.includes("8354c67bf5dab839");
 

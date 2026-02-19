@@ -2,18 +2,27 @@ import React, { useState, FormEvent } from 'react';
 import { API_BASE_URL } from '../util/config';
 import axios from 'axios';
 import CustomButton from '../components/CustomButton';
+import { isAdmin } from '../util/util';
+
+type QaA = {
+  _id: string,
+  pergunta: string,
+  resposta: string,
+};
+
 
 interface FaqProps {
   showComponent: (value: boolean) => void;
   showError: () => void;
+  questionEdit?: QaA;
 }
 
 
-const NovaFaq: React.FC<FaqProps> = ({ showComponent, showError }) => {
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
+const NovaFaq: React.FC<FaqProps> = ({ showComponent, showError, questionEdit }) => {
+  const [question, setQuestion] = useState(questionEdit?.pergunta || "");
+  const [answer, setAnswer] = useState(questionEdit?.resposta || "");
 
-  const disableButtom = () =>{
+  const disableButtom = () => {
     return question.trim().length < 5 || answer.trim().length < 5;
   }
 
@@ -22,14 +31,56 @@ const NovaFaq: React.FC<FaqProps> = ({ showComponent, showError }) => {
 
     const url = `${API_BASE_URL}/duvidas`;
 
+    const idUsuario = localStorage.getItem("idUsuario");
+    const token = localStorage.getItem("token");
+
+    if (!isAdmin()) {
+      showError();
+      return;
+    }
+
     await axios.post(url, {
+      idUsuario: idUsuario,
+      token: token,
       "pergunta": question,
       "resposta": answer
-    }).then((res)=>{
-      if (res.status == 201){
+    }).then((res) => {
+      if (res.status == 201) {
         window.location.reload();
       }
-    }).catch((error)=>{
+    }).catch(() => {
+      showError();
+    });
+
+    setQuestion('');
+    setAnswer('');
+  };
+
+  async function updateQuestion(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const url = `${API_BASE_URL}/duvidas/update`;
+
+    const idUsuario = localStorage.getItem("idUsuario");
+    const token = localStorage.getItem("token");
+
+    if (!isAdmin()) {
+      showError();
+      return;
+    }
+
+    await axios.post(url, {
+      idUsuario: idUsuario,
+      token: token,
+      id: questionEdit?._id,
+      "pergunta": question,
+      "resposta": answer
+
+    }).then((res) => {
+      if (res.status == 201) {
+        window.location.reload();
+      }
+    }).catch(() => {
       showError();
     });
 
@@ -60,7 +111,7 @@ const NovaFaq: React.FC<FaqProps> = ({ showComponent, showError }) => {
           </button>
         </div>
 
-        <form onSubmit={postQuestion} className="p-6 space-y-5">
+        <form onSubmit={questionEdit ? updateQuestion : postQuestion} className="p-6 space-y-5">
           <div className="space-y-1.5">
             <label htmlFor="question" className="text-sm font-semibold  ml-1">
               {("Qual é a pergunta frequente?")}

@@ -8,8 +8,7 @@ async function createSessao(req, res) {
     try {
         const {email, senha} = req.body;
 
-        const usuario = await Usuario
-            .findOne({email});
+        const usuario = await Usuario.Model.findOne({email});
 
         if (!usuario)
             return res.status(404).send("Email não cadastrado!");
@@ -26,7 +25,6 @@ async function createSessao(req, res) {
         dataExpiracao.setDate(dataCriacao.getDate() + 7);
 
         let role = "";
-
 
         if (usuario.role && usuario.role == "admin")
             role = "8354c67bf5dab839";

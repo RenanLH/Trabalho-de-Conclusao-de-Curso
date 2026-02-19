@@ -21,7 +21,7 @@ const Navbar = () => {
 
   useEffect(() => {
 
-    let theme = sessionStorage.getItem("theme");
+    let theme = localStorage.getItem("theme");
     if (theme === 'dark') {
       setIsDarkMode(true)
     }
@@ -48,15 +48,15 @@ const Navbar = () => {
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
 
-    sessionStorage.setItem("theme", isDarkMode ? "light" : "dark")
+    localStorage.setItem("theme", isDarkMode ? "light" : "dark")
     document.documentElement.classList.toggle('dark');
 
   }
 
   const onLogout = () => {
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("idUsuario");
-    sessionStorage.removeItem("nomeUsuario");
+    localStorage.removeItem("token");
+    localStorage.removeItem("idUsuario");
+    localStorage.removeItem("nomeUsuario");
 
     window.location.href = "/home";
   }
@@ -124,7 +124,6 @@ const Navbar = () => {
                       isDarkMode={isDarkMode}
                       toggleTheme={toggleTheme}
                       onLogout={onLogout}
-                      onNavigate={(path) => console.log('Indo para:', path)}
                     />
 
                   </div>

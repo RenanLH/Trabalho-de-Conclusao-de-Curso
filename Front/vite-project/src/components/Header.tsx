@@ -6,7 +6,7 @@ const Header = ({ texto = "", translate = false }) => {
   const { i18n } = useTranslation();
 
   useEffect(() => {
-    let language = sessionStorage.getItem("language");
+    let language = localStorage.getItem("language");
     if (language) {
       i18n.changeLanguage(language);
 
@@ -17,14 +17,14 @@ const Header = ({ texto = "", translate = false }) => {
 
     i18n.changeLanguage(lang);
 
-    sessionStorage.setItem("language", lang);
+    localStorage.setItem("language", lang);
 
     const select = document.querySelector(
       ".goog-te-combo"
     ) as HTMLSelectElement | null;
 
     if (select) {
-      sessionStorage.setItem("language", lang);
+      localStorage.setItem("language", lang);
       select.value = lang;
       document.cookie = `googtrans=/pt-PT/${lang}; path=/`;
 

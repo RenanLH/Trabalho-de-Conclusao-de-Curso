@@ -7,6 +7,17 @@ import CustomButton from "../components/CustomButton";
 import { isAdmin, isLogged } from "../util/util";
 import Notification from "../components/CustomNotification";
 
+type tMensagem = {
+  _id: string;
+  idUsuario: string;
+  tituloMensagem: string;
+  conteudoMensagem: string;
+  statusMensagem: string;
+  dataEnvio: string;
+  nomeUsuario: string;
+
+};
+
 const NovoTopico = () => {
 
   const { t, i18n } = useTranslation();
@@ -19,10 +30,11 @@ const NovoTopico = () => {
   const charCount = titulo.length;
   const isTooShort = charCount > 0 && charCount < minLength;
   const isTooLong = charCount > 0 && charCount > maxLength;
+  const [respostas, setRespostas] = useState<tMensagem[]>([])
 
   useEffect(() => {
 
-    let theme = sessionStorage.getItem("theme");
+    const theme = localStorage.getItem("theme");
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
     }
@@ -34,14 +46,36 @@ const NovoTopico = () => {
       window.location.href = "/forum";
     }
 
-    let language = sessionStorage.getItem("language");
+    const language = localStorage.getItem("language");
     if (language) {
       i18n.changeLanguage(language);
     }
+
+    const mensagens = sessionStorage.getItem("respostas_selecionadas");
+    if (mensagens) {
+      setRespostas(JSON.parse(mensagens));
+    }
+
+
+    const tituloMensagem = sessionStorage.getItem("titulo");
+    if(tituloMensagem){
+      setTitulo(tituloMensagem);
+    }
+
+
   }, []);
 
   const disableButton = () => {
     return conteudo.trim().length < 10 || titulo.trim().length < 10;
+  }
+
+  const changeResposta = (texto: string, index: number) => {
+
+    setRespostas((prevMensagens) =>
+      prevMensagens?.map((item, i) =>
+        i === index ? { ...item, conteudoMensagem: texto } : item
+      )
+    );
   }
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
@@ -55,29 +89,58 @@ const NovoTopico = () => {
     let url = `${API_BASE_URL}/forum`;
 
     if (titulo.trim().length > 15) {
-      const idUsuario = sessionStorage.getItem("idUsuario")
-      const token = sessionStorage.getItem("token");
+      const idUsuario = localStorage.getItem("idUsuario")
+      const token = localStorage.getItem("token");
       if (!idUsuario || !token) {
         setNotification(true);
         return;
       }
 
-      await axios.post(url, {
-        idUsuario: idUsuario,
-        titulo: titulo,
-        conteudo: conteudo
-      }).then((res) => {
-        if (res.status == 201) {
-          setNotifType('success');
-          setNotification(true);
+      if (respostas && respostas.length) {
+        await axios.post(url, {
+          idUsuario: idUsuario,
+          token: token,
+          titulo: titulo,
+          conteudo: conteudo,
+          respostas: respostas
+        }).then((res) => {
+          if (res.status == 201) {
+            setNotifType('success');
+            setNotification(true);
 
-        }
+          }
 
-      }).catch((error) => {
-        if (error.response) {
-          setNotification(true);
-        }
-      });
+        }).catch((error) => {
+          if (error.response) {
+            setNotification(true);
+          }
+        });
+
+      }
+      else {
+
+        console.log("NO RESPOSTASS")
+
+        await axios.post(url, {
+          idUsuario: idUsuario,
+          token: token,
+          titulo: titulo,
+          conteudo: conteudo,
+          respostas: undefined
+        }).then((res) => {
+          if (res.status == 201) {
+            setNotifType('success');
+            setNotification(true);
+          }
+
+        }).catch((error) => {
+          if (error.response) {
+            setNotification(true);
+          }
+        });
+
+      }
+
 
     }
   }
@@ -149,6 +212,33 @@ const NovoTopico = () => {
               <CustomButton disabledFunction={disableButton} buttonText={"Criar novo Tópico"} />
             </div>
           </form>
+
+          <ul>
+
+            {respostas && respostas.map((item, index) => (
+              <li key={index} className="flex w-full ">
+                <div className="flex flex-col p-4 w-full">
+                  <textarea className={`  
+                      min-h-28 w-full p-3 
+                    text-slate-700 dark:text-slate-50 
+                    bg-slate-50 dark:bg-slate-600 
+                      border-2 border-slate-200 dark:border-slate-700 
+                      rounded-lg transition-all duration-200 outline-none resize-y 
+                    placeholder:text-slate-400 
+                    hover:border-slate-300 dark:hover:border-slate-500
+                    focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/20`}
+                    value={item.conteudoMensagem}
+                    onChange={(e) => changeResposta(e.target.value, index)}
+                    placeholder=""
+                    required
+                  />
+                </div>
+              </li>
+            ))}
+
+
+          </ul>
+
         </div>
         <Notification isOpen={notification} type={notifType} mensagem={""} onCancel={() => { }} onLogin={notifType == 'error'} onConfirm={() => window.location.href = "/forum"} />
 

@@ -1,5 +1,11 @@
 import mongoose from "mongoose";
 
+const status = {
+  F: "Finalizada",
+  R: "Respondida",
+  NR: "Nao Respondida",
+}
+
 const Schema = new mongoose.Schema({
     idUsuario: {
         type: mongoose.Schema.Types.ObjectId,
@@ -34,4 +40,6 @@ const Schema = new mongoose.Schema({
 
 })
 
-export default mongoose.model('Mensagem', Schema); 
+const Model = mongoose.model('Mensagem', Schema); 
+
+export default {Model, status}

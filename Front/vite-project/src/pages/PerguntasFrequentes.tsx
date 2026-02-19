@@ -5,7 +5,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { API_BASE_URL } from "../util/config";
 import NovaFaq from "./NovaFaq";
-import { isAdmin } from "../util/util"
+import { isAdmin } from "../util/util";
 import FloatingMenu from "../components/FloatingMenu";
 import { CircleQuestionMark } from "lucide-react";
 import CustomNotification from "../components/CustomNotification";
@@ -25,15 +25,16 @@ const PerguntasFrequentes = () => {
   const [showEditMode, setShowEditMode] = useState<boolean>(false);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [loaded, setLoaded] = useState<boolean>(false);
+  const [questionEdit, setQuestionEdit] = useState<QaA>();
 
   useEffect(() => {
 
-    let theme = sessionStorage.getItem("theme");
+    let theme = localStorage.getItem("theme");
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
     }
 
-    let language = sessionStorage.getItem("language");
+    let language = localStorage.getItem("language");
     if (language) {
       i18n.changeLanguage(language);
     }
@@ -52,25 +53,55 @@ const PerguntasFrequentes = () => {
         newSelection.add(id);
       }
     }
-    else if (showEditMode && !showDeleteMode){
-        newSelection.clear();
-        newSelection.add(id);
+    else if (showEditMode && !showDeleteMode) {
+      newSelection.clear();
+      newSelection.add(id);
     }
 
     setSelectedIds(newSelection);
   };
 
   const confirmBulkDelete = async () => {
-    const idsParaDeletar = duvidas.filter((_, index) => selectedIds.has(index)).map((item) => item._id);
-    console.log("Deletando itens:", idsParaDeletar);
+    const idsToDelete = duvidas.filter((_, index) => selectedIds.has(index)).map((item) => item._id);
+    console.log("Deletando itens:", idsToDelete);
     setSelectedIds(new Set());
 
 
+    const url = `${API_BASE_URL}/duvidas/delete`;
+
+    const idUsuario = localStorage.getItem("idUsuario");
+    const token = localStorage.getItem("token");
+
+    if (!isAdmin()) {
+      showError();
+      return;
+    }
+
+    await axios.post(url, {
+      idUsuario: idUsuario,
+      token: token,
+      ids: idsToDelete,
+    }).then((res) => {
+      if (res.status == 200) {
+        setDuvidas(duvidas.filter((_, index) => !selectedIds.has(index)));
+        setShowDeleteMode(false);
+      }
+    }).catch(() => {
+      showError();
+    });
     // Aqui você chama sua API Node.js passando a lista de IDs
     // Após o sucesso:
-    setDuvidas(duvidas.filter((_, index) => !selectedIds.has(index)));
-    setShowDeleteMode(false);
   };
+
+
+  const confirmEdit = () => {
+    let qAaToEdit = duvidas.filter((_, index) => selectedIds.has(index))[0];
+
+    setQuestionEdit(qAaToEdit);
+    setShowNewFaq(true);
+    setSelectedIds(new Set());
+
+  }
 
   const showError = () => {
     setNotification(true);
@@ -118,14 +149,14 @@ const PerguntasFrequentes = () => {
                 </span>
                 <div className="flex gap-2 notranslate">
                   <button
-                    onClick={() => setShowEditMode(false)}
+                    onClick={() => { setShowEditMode(false); setSelectedIds(new Set()) }}
                     className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white"
                   >
                     {t("Cancelar")}
                   </button>
                   <button
                     disabled={selectedIds.size === 0}
-                    onClick={confirmBulkDelete}
+                    onClick={confirmEdit}
                     className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-bold rounded-lg shadow-lg shadow-red-500/20 transition-all">
                     Editar
                   </button>
@@ -141,7 +172,7 @@ const PerguntasFrequentes = () => {
                 </span>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => setShowDeleteMode(false)}
+                    onClick={() => { setShowDeleteMode(false); setSelectedIds(new Set()) }}
                     className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white"
                   >
                     Cancelar
@@ -158,7 +189,7 @@ const PerguntasFrequentes = () => {
             )}
 
             <ul className="container mx-auto">
-              
+
               {duvidas.map((item, index) => (
                 <li key={index} className="flex items-center gap-4 group">
                   {/* Checkbox animado que aparece no modo delete */}
@@ -213,7 +244,7 @@ const PerguntasFrequentes = () => {
       }
       {
         showNewFaq &&
-        <NovaFaq showComponent={setShowNewFaq} showError={showError} />
+        <NovaFaq questionEdit={questionEdit} showComponent={setShowNewFaq} showError={showError} />
       }
 
 

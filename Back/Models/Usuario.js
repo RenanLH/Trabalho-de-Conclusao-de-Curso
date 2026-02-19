@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+const role = {
+  ADMIN: 'admin',
+  USER: 'user',
+}
+
 const Schema = new mongoose.Schema({
     email: {
         type: String,
@@ -21,4 +26,6 @@ const Schema = new mongoose.Schema({
 
 })
 
-export default mongoose.model('Usuario', Schema); 
+const Model = mongoose.model('Usuario', Schema);
+
+export default {Model, role}; 

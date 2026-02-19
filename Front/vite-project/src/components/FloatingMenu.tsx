@@ -84,7 +84,6 @@ const FloatingMenu: React.FC<FloatingMenuProps> = ({
             </button>
           </div>
         }
-        {/* Excluir */}
         {showDelete &&
           <div className="relative flex items-center justify-end group">
             <span className="absolute right-full mr-3 bg-slate-800 dark:bg-slate-700 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">

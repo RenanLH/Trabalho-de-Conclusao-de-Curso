@@ -2,16 +2,6 @@ import Mensagem from "../Models/Mensagem.js";
 import Sessao from "../Models/Sessao.js";
 import Usuario from "../Models/Usuario.js";
 
-const status = {
-  F: "Finalizada",
-  R: "Respondida",
-  NR: "Nao Respondida",
-}
-
-const role = {
-  ADMIN: 'admin',
-  USER: 'user',
-}
 
 
 async function createMensagem(req, res) {
@@ -26,9 +16,9 @@ async function createMensagem(req, res) {
     if (!validaUsuario)
       return res.status(404).send("Usuario nao encontrado");
 
-    const statusMensagem = status.NR;
+    const statusMensagem = Mensagem.status.NR;
 
-    const mensagemNaoRespondida = await Mensagem.findOne({
+    const mensagemNaoRespondida = await Mensagem.Model.findOne({
       idUsuario,
       statusMensagem
     });
@@ -40,10 +30,10 @@ async function createMensagem(req, res) {
 
     const dataEnvio = Date.now();
 
-    let usuario = await Usuario.findById(idUsuario);
+    let usuario = await Usuario.Model.findById(idUsuario);
     const nomeUsuario = usuario.nomeUsuario;
 
-    const createdMensagem = await Mensagem.create({
+    const createdMensagem = await Mensagem.Model.create({
       idUsuario,
       conteudoMensagem,
       tituloMensagem,
@@ -76,18 +66,18 @@ async function awnserMensagem(req, res) {
     if (!validaUsuario)
       return res.status(404).send("Usuario não encontrado");
 
-    let usuario = await Usuario.findById(idUsuario);
+    let usuario = await Usuario.Model.findById(idUsuario);
 
-    const mensagem = await Mensagem.findById(idMensagem);
+    const mensagem = await Mensagem.Model.findById(idMensagem);
 
-    if (usuario.role != role.ADMIN && mensagem.idUsuario.toString() != usuario._id.toString()) {
+    if (usuario.role != Usuario.role.ADMIN && mensagem.idUsuario.toString() != usuario._id.toString()) {
       return res.status(403).send("Forbidden");
     }
 
     const nomeUsuario = usuario.nomeUsuario;
 
     const dataEnvio = Date.now();
-    const novaMensagem = await Mensagem.create({
+    const novaMensagem = await Mensagem.Model.create({
       idUsuario,
       conteudoMensagem,
       idMensagem,
@@ -112,20 +102,18 @@ async function awnserMensagem(req, res) {
 }
 
 
-
 async function getMensagemUsuario(req, res) {
   try {
     const { idUsuario } = req.params;
 
-    const usuario = await Usuario.findById(idUsuario);
-
+    const usuario = await Usuario.Model.findById(idUsuario);
 
     if (!usuario)
       return res.status(404).send("Usuario nao encontrado");
 
 
-    if (usuario.role === role.ADMIN) {
-      const mensagens = await Mensagem.find({
+    if (usuario.role === Usuario.role.ADMIN) {
+      const mensagens = await Mensagem.Model.find({
         idMensagem: { $exists: false },
         tituloMensagem: { $exists: true }
       }
@@ -137,7 +125,7 @@ async function getMensagemUsuario(req, res) {
       for (const mensage of mensagens) {
         let id = mensage.idUsuario.toString();
 
-        let usuario = await Usuario.findById(id);
+        let usuario = await Usuario.Model.findById(id);
 
         if (usuario)
           mensage.nomeUsuario = usuario.nomeUsuario;
@@ -147,7 +135,7 @@ async function getMensagemUsuario(req, res) {
       return res.status(200).send(mensagens);
     }
 
-    const mensagens = await Mensagem.find({
+    const mensagens = await Mensagem.Model.find({
       idUsuario,
       idMensagem: { $exists: false },
       tituloMensagem: { $exists: true }
@@ -158,7 +146,7 @@ async function getMensagemUsuario(req, res) {
     for (const mensage of mensagens) {
       let id = mensage.idUsuario.toString();
 
-      let usuario = await Usuario.findById(id);
+      let usuario = await Usuario.Model.findById(id);
 
       if (usuario)
         mensage.nomeUsuario = usuario.nomeUsuario;
@@ -178,14 +166,14 @@ async function getMensagemId(req, res) {
     const { idMensagem } = req.params;
     const { token } = req.body;
 
-    const mensagem = await Mensagem.findById(idMensagem);
+    const mensagem = await Mensagem.Model.findById(idMensagem);
 
     if (!mensagem)
       return res.status(404).send("Mensagem nao encontrada");
 
     let id = mensagem.idUsuario.toString();
 
-    let usuario = await Usuario.findById(id);
+    let usuario = await Usuario.Model.findById(id);
 
     let sessaoToken = await Sessao.findOne({ token })
 
@@ -194,14 +182,14 @@ async function getMensagemId(req, res) {
     }
     id = sessaoToken.idUsuario.toString();
 
-    const usuarioToken = await Usuario.findById(id);
+    const usuarioToken = await Usuario.Model.findById(id);
 
     if (!usuario || !usuarioToken) {
       return res.status(403).send("Forbidden");
     }
 
     if (usuario.id != usuarioToken.id) {
-      if (usuarioToken.role != role.ADMIN) {
+      if (usuarioToken.role != Usuario.role.ADMIN) {
         return res.status(403).send("Forbidden Not Admin");
       }
     }
@@ -229,20 +217,20 @@ async function getRespostasId(req, res) {
 
     let id = sessaoToken.idUsuario.toString();
 
-    const usuarioToken = await Usuario.findById(id);
-    let usuario = await Usuario.findById(id);
+    const usuarioToken = await Usuario.Model.findById(id);
+    let usuario = await Usuario.Model.findById(id);
 
     if (!usuario || !usuarioToken) {
       return res.status(402).send("Forbidden ");
     }
 
     if (usuario.id != usuarioToken.id) {
-      if (usuarioToken.role != role.ADMIN) {
+      if (usuarioToken.role != Usuario.role.ADMIN) {
         return res.status(403).send("Forbidden Not Admin");
       }
     }
 
-    const mensagens = await Mensagem.find({ idMensagem });
+    const mensagens = await Mensagem.Model.find({ idMensagem });
 
     if (!mensagens)
       return res.status(404).send("Mensagem nao encontrada");
@@ -250,14 +238,13 @@ async function getRespostasId(req, res) {
     for (const mensage of mensagens) {
       let id = mensage.idUsuario.toString();
 
-      usuario = await Usuario.findById(id);
+      usuario = await Usuario.Model.findById(id);
 
       if (usuario)
         mensage.nomeUsuario = usuario.nomeUsuario;
 
       mensage.id = undefined;
       mensage.idMensagem = undefined;
-      mensage.idUsuario = undefined;
       mensage.statusMensagem = usuario.role;
     }
 
@@ -274,9 +261,7 @@ async function getIndex(req, res) {
   try {
     let { statusMensagem } = req.params;
 
-    const mensagens = await Mensagem.find({
-      statusMensagem,
-    })
+    const mensagens = await Mensagem.Model.find({ statusMensagem }) 
 
     if (!mensagens || !mensagens.length)
       return res.status(404).send("Nenhuma mensagem encontrada");
@@ -284,12 +269,10 @@ async function getIndex(req, res) {
     for (const mensage of mensagens) {
       let id = mensage.idUsuario.toString();
 
-      let usuario = await Usuario.findById(id);
-
+      let usuario = await Usuario.Model.findById(id);
 
       if (usuario)
         mensage.nomeUsuario = usuario.nomeUsuario;
-
 
       mensage.idUsuario = "";
     }
@@ -316,9 +299,9 @@ async function finishMensagem(req, res) {
     if (!validaUsuario)
       return res.status(404).send("Usuario não encontrado");
 
-    let usuario = await Usuario.findById(idUsuario);
+    let usuario = await Usuario.Model.findById(idUsuario);
 
-    if (usuario.role != role.ADMIN) {
+    if (usuario.role != Usuario.role.ADMIN) {
       return res.status(403).send("Forbidden");
     }
 

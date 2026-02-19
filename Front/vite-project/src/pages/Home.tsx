@@ -7,12 +7,12 @@ const Home = () => {
 
   useEffect(() => {
 
-    let theme = sessionStorage.getItem("theme");
+    let theme = localStorage.getItem("theme");
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
     }
 
-    let language = sessionStorage.getItem("language");
+    let language = localStorage.getItem("language");
     if (language) {
       i18n.changeLanguage(language);
     }

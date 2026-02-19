@@ -1,16 +1,11 @@
 import { useEffect, useState } from "react";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { fab } from "@fortawesome/free-brands-svg-icons";
-import { faEye, faEyeSlash, faUser, faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 import axios from "axios";
 import Header from "../components/Header";
 import { useTranslation } from "react-i18next";
 import { API_BASE_URL } from "../util/config";
 import CustomButton from "../components/CustomButton";
 import CustomNotification from "../components/CustomNotification";
-
-library.add(fab, faEyeSlash, faEye);
+import { Eye, EyeOff, Mail, User, Lock } from "lucide-react";
 
 const Cadastro = () => {
   const { t, i18n } = useTranslation();
@@ -28,12 +23,12 @@ const Cadastro = () => {
   const [onConfirm, setOnConfirm] = useState<()=>void>(()=>{})
 
   useEffect(() => {
-    let theme = sessionStorage.getItem("theme");
+    let theme = localStorage.getItem("theme");
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
     }
 
-    let language = sessionStorage.getItem("language");
+    let language = localStorage.getItem("language");
     if (language) {
       i18n.changeLanguage(language);
     }
@@ -106,33 +101,33 @@ const Cadastro = () => {
 
   }
 
-  return (
-    <div className=" bg-gray-100 dark:bg-slate-800/80 min-h-screen ">
-
+ return (
+    <div className="bg-gray-100 dark:bg-slate-800/80 min-h-screen">
       <div className="w-full">
         <Header texto={t("Cadastro")} />
       </div>
 
       <div className="flex flex-col items-center justify-center">
+        <p className="text-slate-500 dark:text-slate-50 mt-5 mb-5">
+          Crie sua conta para começar a interagir
+        </p>
 
-        <p className="text-slate-500 dark:text-slate-50 mt-5 mb-5">Crie sua conta para começar a interagir</p>
-
-        <div className=" w-full max-w-xl dark:bg-slate-900 dark:text-slate-50 bg-slate-50 text-slate-900 rounded-2xl shadow-xl  p-8 ">
-
-          <form action="" onSubmit={(e) => onSubmit(e)} className="space-y-5">
-
-            <div className="relative group ">
+        <div className="w-full max-w-xl dark:bg-slate-900 dark:text-slate-50 bg-slate-50 text-slate-900 rounded-2xl shadow-xl p-8">
+          <form onSubmit={onSubmit} className="space-y-5">
+            
+            <div className="relative group">
               <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider ml-1 mb-1 block">
-                {t("Nome Completo")}
+                {t("Usuario")}
               </label>
               <div className="relative">
-                <div
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors">
-                  <FontAwesomeIcon icon={faUser} />
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                  <User size={18} />
                 </div>
                 <input
-                  className="w-full pl-10 pr-4 py-3 text-slate-700 dark:text-slate-50 bg-slate-50 dark:bg-slate-800 border-transparent border-2 rounded-xl placeholder:text-slate-400"
-                  type="text" placeholder="Seu nome" onChange={(e) => setNomeUsuario(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 text-slate-700 dark:text-slate-50 bg-slate-50 dark:bg-slate-800 border-transparent border-2 rounded-xl placeholder:text-slate-400 focus:border-blue-500 outline-none transition-all"
+                  type="text"
+                  placeholder={t("Usuario")}
+                  onChange={(e) => setNomeUsuario(e.target.value)}
                   value={nomeUsuario}
                   required
                 />
@@ -144,13 +139,14 @@ const Cadastro = () => {
                 {t("Email")}
               </label>
               <div className="relative">
-                <div
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors">
-                  <FontAwesomeIcon icon={faEnvelope} />
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                  <Mail size={18} />
                 </div>
                 <input
-                  className="w-full pl-10 pr-4 py-3 text-slate-700 dark:text-slate-50 bg-slate-50 dark:bg-slate-800 border-transparent border-2 rounded-xl placeholder:text-slate-400"
-                  type="email" placeholder="exemplo@email.com" onChange={(e) => setEmail(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 text-slate-700 dark:text-slate-50 bg-slate-50 dark:bg-slate-800 border-transparent border-2 rounded-xl placeholder:text-slate-400 focus:border-blue-500 outline-none transition-all"
+                  type="email"
+                  placeholder="exemplo@email.com"
+                  onChange={(e) => setEmail(e.target.value)}
                   value={email}
                   required
                 />
@@ -162,19 +158,23 @@ const Cadastro = () => {
                 {t("Senha")}
               </label>
               <div className="relative">
-                <div
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors">
-                  <FontAwesomeIcon icon={faLock} />
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                  <Lock size={18} />
                 </div>
                 <input
-                  className="w-full pl-10 pr-4 py-3 text-slate-700 dark:text-slate-50 bg-slate-50 dark:bg-slate-800 border-transparent border-2 rounded-xl placeholder:text-slate-400"
-                  type={!showPass ? "password" : "text"} placeholder="••••••••" onChange={(e) => setSenha(e.target.value)}
+                  className="w-full pl-10 pr-12 py-3 text-slate-700 dark:text-slate-50 bg-slate-50 dark:bg-slate-800 border-transparent border-2 rounded-xl placeholder:text-slate-400 focus:border-blue-500 outline-none transition-all"
+                  type={!showPass ? "password" : "text"}
+                  placeholder="••••••••"
+                  onChange={(e) => setSenha(e.target.value)}
                   value={senha}
                   required
                 />
-                <button type="button" onClick={clickHandler}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-2 transition-colors">
-                  <FontAwesomeIcon icon={showPass ? faEye : faEyeSlash} />
+                <button
+                  type="button"
+                  onClick={clickHandler}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-500 p-2 transition-colors"
+                >
+                  {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
@@ -184,20 +184,23 @@ const Cadastro = () => {
                 {t("Confirmar Senha")}
               </label>
               <div className="relative">
-                <div
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors">
-                  <FontAwesomeIcon icon={faLock} />
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                  <Lock size={18} />
                 </div>
                 <input
-                  className="w-full pl-10 pr-4 py-3 text-slate-700 dark:text-slate-50 bg-slate-50 dark:bg-slate-800 border-transparent border-2 rounded-xl placeholder:text-slate-400"
-                  type={!showPassConfirm ? "password" : "text"} placeholder="••••••••" onChange={(e) =>
-                    setConfirmarSenha(e.target.value)}
+                  className="w-full pl-10 pr-12 py-3 text-slate-700 dark:text-slate-50 bg-slate-50 dark:bg-slate-800 border-transparent border-2 rounded-xl placeholder:text-slate-400 focus:border-blue-500 outline-none transition-all"
+                  type={!showPassConfirm ? "password" : "text"}
+                  placeholder="••••••••"
+                  onChange={(e) => setConfirmarSenha(e.target.value)}
                   value={confirmarSenha}
                   required
                 />
-                <button type="button" onClick={clickHandlerConfirm}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-2 transition-colors">
-                  <FontAwesomeIcon icon={showPassConfirm ? faEye : faEyeSlash} />
+                <button
+                  type="button"
+                  onClick={clickHandlerConfirm}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-500 p-2 transition-colors"
+                >
+                  {showPassConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
@@ -207,17 +210,23 @@ const Cadastro = () => {
             </div>
 
             <p className="text-center text-sm text-slate-500 pt-4">
-              Já tem uma conta? <a href="/login" className="text-blue-600 font-bold hover:underline">{t("Login")}</a>
+              Já tem uma conta?{" "}
+              <a href="/login" className="text-blue-600 font-bold hover:underline">
+                {t("Login")}
+              </a>
             </p>
 
-            <CustomNotification isOpen={notification} type={notifType} mensagem={error} onCancel={onCancel} onLogin={false} onConfirm={onConfirm} />
-
+            <CustomNotification
+              isOpen={notification}
+              type={notifType}
+              mensagem={error}
+              onCancel={onCancel}
+              onLogin={false}
+              onConfirm={onConfirm}
+            />
           </form>
         </div>
-
       </div>
-
-
     </div>
   );
 };

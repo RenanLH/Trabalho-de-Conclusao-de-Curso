@@ -25,7 +25,7 @@ const Mensagens = () => {
   const [loaded, setLoaded] = useState<boolean>(false);
 
   useEffect(() => {
-    let theme = sessionStorage.getItem("theme");
+    let theme = localStorage.getItem("theme");
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
     }
@@ -34,7 +34,7 @@ const Mensagens = () => {
       window.location.href = "/login";
     }
 
-    let language = sessionStorage.getItem("language");
+    let language = localStorage.getItem("language");
     if (language) {
       i18n.changeLanguage(language);
     }
@@ -49,7 +49,7 @@ const Mensagens = () => {
   }
 
   async function getMensagens() {
-    const idUsuario = sessionStorage.getItem("idUsuario");
+    const idUsuario = localStorage.getItem("idUsuario");
     const url = `${API_BASE_URL}/mensagens/usuario/${idUsuario}`
     setMensagens([]);
 

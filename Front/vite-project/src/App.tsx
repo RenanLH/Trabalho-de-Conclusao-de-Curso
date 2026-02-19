@@ -11,7 +11,7 @@ import Mensagens from "./pages/MesagemList";
 import MensagemPage from "./pages/Mensagem";
 import NovaMensagem from "./pages/NovaMensagem";
 import Forum_NovoTopico from "./pages/NovoTopico";
-import NovaSenha from "./pages/NovaSenha";
+import Configuracoes from "./pages/Configuracoes";
 
 function App() {
   return (
@@ -29,7 +29,7 @@ function App() {
           <Route path="/mensagem/:id" element={<MensagemPage />} />
           <Route path="/mensagem/nova" element={<NovaMensagem/>}/>
           <Route path="/cadastro" element={<Cadastro />} />
-          <Route path= "/esqueciSenha" element={<NovaSenha/>}/>
+          <Route path="/config" element={<Configuracoes />} />
           <Route path="/login" element={<Login/>}/>
           <Route path="/home" element={<Home />} />
         </Routes>

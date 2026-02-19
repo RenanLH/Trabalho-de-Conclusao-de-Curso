@@ -1,26 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Moon, LogOut, Settings } from 'lucide-react';
-import logo_login from "../assets/user-circle-svgrepo-com.svg"
 import { useTranslation } from 'react-i18next';
 import UserBadge from './UserBadge';
 
-
-
 interface UserMenuProps {
   onLogout: () => void;
-  onNavigate: (path: string) => void;
   toggleTheme: () => void;
   isDarkMode: boolean;
   showComponent: (b: boolean) => void;
 }
 
-const UserMenu: React.FC<UserMenuProps> = ({ onLogout, onNavigate, toggleTheme, isDarkMode }) => {
+const UserMenu: React.FC<UserMenuProps> = ({ onLogout, toggleTheme, isDarkMode }) => {
 
   const { t } = useTranslation();
   const [nomeUsuario, setNomeUsuario] = useState<string>("");
 
   useEffect(() => {
-    const nome = sessionStorage.getItem("nomeUsuario");
+    const nome = localStorage.getItem("nomeUsuario");
     if (nome) {
       setNomeUsuario(nome);
     }
@@ -29,13 +25,11 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout, onNavigate, toggleTheme, 
   return (
     <div className="w-72  rounded-md shadow-xl border py-2 overflow-hidden bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-50">
 
-      <div onClick={() => onNavigate('/profile')}
-        className="flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors group hover:bg-slate-200 dark:hover:bg-slate-800">
+      <div
+        className="flex items-center gap-3 px-4 py-3">
 
         <div className="relative">
-
           <UserBadge user={nomeUsuario}/>
-         
         </div>
         <div className="flex flex-col">
           <span className="text-sm font-medium">{t("Conta")}</span>
@@ -61,8 +55,8 @@ const UserMenu: React.FC<UserMenuProps> = ({ onLogout, onNavigate, toggleTheme, 
 
       <hr className="border-[#343536] my-1" />
 
-      <div className="flex flex-col ">
-        <button className="flex items-center justify-between px-4 py-2.5  transition-colors w-full text-left group hover:bg-slate-200 dark:hover:bg-slate-800">
+      <div className="flex flex-col">
+        <button className="flex items-center justify-between px-4 py-2.5  transition-colors w-full text-left group hover:bg-slate-200 dark:hover:bg-slate-800"  onClick={() => window.location.href = "/config"}>
           <div className="flex items-center gap-3 ">
             <span className="text-black dark:text-white">{<Settings size={20} color={isDarkMode ? "white" : "black"} />}</span>
             <div className="flex flex-col">

@@ -54,12 +54,12 @@ const Topic = () => {
 
   useEffect(() => {
 
-    let theme = sessionStorage.getItem("theme");
+    let theme = localStorage.getItem("theme");
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
     }
 
-    let language = sessionStorage.getItem("language");
+    let language = localStorage.getItem("language");
     if (language) {
       i18n.changeLanguage(language);
     }
@@ -90,7 +90,8 @@ const Topic = () => {
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    let idUsuario = sessionStorage.getItem("idUsuario") || "";
+    const idUsuario = localStorage.getItem("idUsuario");
+    const token  = localStorage.getItem("token");
 
     if (!isLogged()) {
       setNotification(true);
@@ -100,6 +101,7 @@ const Topic = () => {
     let url = `${API_BASE_URL}/topico/respostas/` + id;
 
     const result = await axios.post(url, {
+      token: token,
       idUsuario: idUsuario,
       idTopico: id,
       conteudoResposta: conteudoResposta

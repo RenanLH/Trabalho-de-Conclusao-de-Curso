@@ -13,17 +13,6 @@ async function getRespostas(req, res) {
         if (!respostas || !respostas.length)
             return res.status(404).send("Nenhuma resposta encontrada");
 
-
-        for (const resposta of respostas){
-            let id = resposta.idUsuario.toString();
-
-            let usuario = await Usuario.findById(id);
-
-            if (usuario)
-                resposta.nomeUsuario = usuario.nomeUsuario;
-
-        }
-
         return res.status(200).send(respostas);
 
     } catch (error) {
@@ -43,17 +32,6 @@ async function getRespostasTopico(req, res) {
 
         if (!respostas || !respostas.length)
             return res.status(404).send("Nenhuma resposta encontrada");
-
-
-        for (const resposta of respostas){
-            let id = resposta.idUsuario.toString();
-
-            let usuario = await Usuario.findById(id);
-
-            if (usuario)
-                resposta.nomeUsuario = usuario.nomeUsuario;
-
-        }
 
         return res.status(200).send(respostas);
 
@@ -76,7 +54,7 @@ async function createResposta(req, res) {
             return res.status(400).send("Resposta nao encontrada");
         }
 
-        const usuario = await Usuario.findById(idUsuario);
+        const usuario = await Usuario.Model.findById(idUsuario);
 
         if (!usuario){
             return res.status(400).send("Usuario nao encontrado");
@@ -121,7 +99,7 @@ async function createRespostaTopico(req, res) {
             return res.status(400).send("Topico nao encontrado");
         }
 
-        const usuario = await Usuario.findById(idUsuario);
+        const usuario = await Usuario.Model.findById(idUsuario);
 
         if (!usuario){
             return res.status(400).send("Usuario nao encontrado");

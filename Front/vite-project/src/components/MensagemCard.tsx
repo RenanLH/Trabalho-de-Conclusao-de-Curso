@@ -13,7 +13,7 @@ interface MensagemCardProps {
 
 const MensagemCard = ({ id, title, userName, userId, date, conteudo }: MensagemCardProps) => {
   const navigate = useNavigate();
-  let idUsuario = sessionStorage.getItem("idUsuario");
+  let idUsuario = localStorage.getItem("idUsuario");
 
   function redirectPage() {
     navigate(`/mensagem/${id}`);

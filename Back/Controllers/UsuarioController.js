@@ -3,11 +3,6 @@ import bcrypt from "bcrypt";
 import crypto from "crypto";
 import Sessao from "../Models/Sessao.js";
 
-const role = {
-  ADMIN: 'admin',
-  USER: 'user',
-}
-
 async function hashPass(senha) {
   try {
     const salt = await bcrypt.genSalt(10);
@@ -29,7 +24,7 @@ async function createUsuario(req, res) {
 
       return res.status(400).send('Dados Inválidos');
 
-    const usuarioExistente = await Usuario.findOne({
+    const usuarioExistente = await Usuario.Model.findOne({
       email
     });
 
@@ -43,11 +38,11 @@ async function createUsuario(req, res) {
       return res.status(500).send("Erro do servidor");
     }
 
-    const createdUsuario = await Usuario.create({
+    const createdUsuario = await Usuario.Model.create({
       email,
       senha: hashedPass,
       nomeUsuario,
-      role: role.USER
+      role: Usuario.role.USER
     })
 
     if (!createdUsuario) {
@@ -82,7 +77,7 @@ async function getUsuario(req, res) {
   try {
     const { email, senha } = req.body;
 
-    const usuario = await Usuario.findOne({ email });
+    const usuario = await Usuario.Model.findOne({ email });
 
     if (!usuario || !await bcrypt.compare(senha, usuario.senha))
       return res.status(404).send("senha incorreta");
@@ -98,7 +93,7 @@ async function getUsuario(req, res) {
 async function getIndexUsuario(req, res) {
   try {
 
-    const usuario = await Usuario.find();
+    const usuario = await Usuario.Model.find();
 
     if (!usuario || !usuario.length)
       return res.status(404).send("Nenhum usuario encontrado");

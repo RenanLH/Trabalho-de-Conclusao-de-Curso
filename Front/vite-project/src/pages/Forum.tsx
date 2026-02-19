@@ -6,7 +6,7 @@ import axios from "axios";
 import ForumCard from "../components/ForumCard";
 import { isAdmin } from "../util/util";
 import FloatingMenu from "../components/FloatingMenu";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 type TopicDB = {
   _id: string;
@@ -25,12 +25,12 @@ const Forum = () => {
 
 
   useEffect(() => {
-    let theme = sessionStorage.getItem("theme");
+    let theme = localStorage.getItem("theme");
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
     }
 
-    let language = sessionStorage.getItem("language");
+    let language = localStorage.getItem("language");
     if (language) {
       i18n.changeLanguage(language);
     }
@@ -58,7 +58,7 @@ const Forum = () => {
       }
 
       setLoaded(true);
-    }).catch((error) => {
+    }).catch(() => {
       setLoaded(true);
     });
 

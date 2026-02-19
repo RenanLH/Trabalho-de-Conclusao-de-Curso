@@ -6,8 +6,6 @@ interface SelectLanguageProps {
 
 const SelectLanguage: React.FC<SelectLanguageProps> = ({ changeLanguage }) => {
 
-
-
   return (
     <div className="flex gap-4 items-center notranslate">
       <span className="flag-icon flag-icon-br" onClick={() => changeLanguage('pt')}></span>
